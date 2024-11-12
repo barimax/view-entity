@@ -9,37 +9,37 @@ import Foundation
 import Vapor
 
 public struct IDContainer: Codable {
-    let id: String?
-    var optionalUUID: UUID? {
+    public let id: String?
+    public var optionalUUID: UUID? {
         if let idString = self.id {
             return UUID(idString)
         }
         return nil
     }
-    func uuid() throws -> UUID {
+    public func uuid() throws -> UUID {
         guard let uuid = self.optionalUUID else {
             throw Abort(.badRequest)
         }
         return uuid
     }
     
-    init?(id: UUID?){
+    public init?(id: UUID?){
         guard let uuid = id?.uuidString else{
             return nil
         }
         self.id = uuid
     }
     
-    init?(id: String?) {
+    public init?(id: String?) {
         guard let idString = id else {
             return nil
         }
         self.id = idString
     }
-    init(id: String) {
+    public init(id: String) {
         self.id = id
     }
-    init(uuid: UUID){
+    public init(uuid: UUID){
         self.id = uuid.uuidString
     }
 }

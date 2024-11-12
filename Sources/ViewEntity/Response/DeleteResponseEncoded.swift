@@ -19,7 +19,7 @@ public struct DeleteResponseEncoded: AsyncResponseEncodable, Encodable {
     let backRefsOptions: [BackRefOptions]
     var ok: Bool { backRefsOptions.isEmpty }
     
-    init(backRefsOptions: [BackRefOptions]){
+    public init(backRefsOptions: [BackRefOptions]){
         self.backRefsOptions = backRefsOptions
     }
     

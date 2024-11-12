@@ -26,7 +26,7 @@ public struct ResponseEncoded: AsyncResponseEncodable, Encodable {
     }
     
     
-    init(view v: ViewProtocol, entity e: EntityCodable?, list l: [EntityCodable] = [], lastLimit la: Int = 30){
+    public init(view v: ViewProtocol, entity e: EntityCodable?, list l: [EntityCodable] = [], lastLimit la: Int = 30){
         self.view = v
         self.entity = e
         self.list = l

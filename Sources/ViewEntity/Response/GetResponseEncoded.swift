@@ -23,7 +23,7 @@ public struct GetResponseEncoded: AsyncResponseEncodable, Encodable {
     var isLast: Bool {
         lastId == nil || list.count < 300
     }
-    init(propertyName s: String = "", sortDirection sd: String = "", list l: [EntityCodable] = [], lastId id: UUID?){
+    public init(propertyName s: String = "", sortDirection sd: String = "", list l: [EntityCodable] = [], lastId id: UUID?){
         self.list = l
         self.lastId = id
         self.propertyName = s

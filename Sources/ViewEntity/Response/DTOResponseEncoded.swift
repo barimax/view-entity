@@ -23,7 +23,7 @@ public struct DTOResponseEncoded: AsyncResponseEncodable, Encodable {
     let entity: Encodable?
     let isLast: Bool = false
     
-    init(view v: ViewProtocol?, entity e: Encodable?){
+    public init(view v: ViewProtocol?, entity e: Encodable?){
         self.view = v
         self.entity = e
     }
