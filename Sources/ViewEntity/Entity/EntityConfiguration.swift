@@ -8,9 +8,9 @@
 import Foundation
 
 public struct EntityConfiguration {
-    var singleName: String
-    var pluralName: String
-    var fields: [FieldProtocol]
-    var searchableDBFields: [String]
-    var titleFieldName: String
+    public var singleName: String
+    public var pluralName: String
+    public var fields: [FieldProtocol]
+    public var searchableDBFields: [String]
+    public var titleFieldName: String
 }
