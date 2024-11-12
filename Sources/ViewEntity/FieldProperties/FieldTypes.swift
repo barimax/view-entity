@@ -30,15 +30,15 @@ public struct RefOptionField: Encodable, Sendable {
     }
 }
 public struct BackRefs: Encodable, Sendable {
-    var registerName: String = ""
-    var formField: String = ""
-    var singleName: String = ""
-    var pluralName: String = ""
-    var createNewByMultiple: Bool = false
-    var createNewByMultipleFields: [String] = []
+    public var registerName: String = ""
+    public var formField: String = ""
+    public var singleName: String = ""
+    public var pluralName: String = ""
+    public var createNewByMultiple: Bool = false
+    public var createNewByMultipleFields: [String] = []
     let entity: EntityProtocol.Type
     
-    init(entity e: EntityProtocol.Type) {
+    public init(entity e: EntityProtocol.Type) {
         self.entity = e
     }
     // Codable keys
