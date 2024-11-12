@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "view-entity",
     platforms: [
-        .macOS(.v10_15),
+        .macOS(.v12),
         .iOS(.v13),
         .watchOS(.v6),
         .tvOS(.v13),

@@ -53,3 +53,4 @@ public extension EntityProtocol {
     static var dateOptimizedPropertyName: String? { nil } // default for regular entity
     static var isDocument: Bool { false } // default for regular entity
 }
+

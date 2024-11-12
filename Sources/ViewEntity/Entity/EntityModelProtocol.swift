@@ -262,3 +262,19 @@ public extension EntityModelProtocol {
     
     
 }
+
+public extension EntityModelProtocol where Self: LoadAllViewProtocol {
+    static func view(_ r: Request, _ v: [String] = []) async throws -> ViewProtocol? {
+        var view = try await View<Self>.load(req: r, views: v, full: true)
+        view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
+        return view
+    }
+}
+
+public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol, Self: LoadAllViewProtocol {
+    static func view(_ r: Request, _ v: [String] = []) async throws -> ViewProtocol? {
+        var view = try await View<Self>.load(req: r, views: v, full: true)
+        view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
+        return view
+    }
+}
