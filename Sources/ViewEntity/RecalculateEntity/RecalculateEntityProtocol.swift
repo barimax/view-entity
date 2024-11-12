@@ -8,7 +8,7 @@
 import Vapor
 import FluentKit
 
-protocol RecalculateProtocol: DTOProtocol {
+public protocol RecalculateProtocol: DTOProtocol {
     static var recalculateTriggerFieldsList: [String] { get }
     static func recalculate(request: Request, view: ViewProtocol?, triggerFieldName: String?, dto: DTO?) async throws -> (DTO, ViewProtocol?)
 }

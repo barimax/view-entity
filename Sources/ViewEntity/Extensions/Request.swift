@@ -22,8 +22,8 @@ struct EntityTypeKey: StorageKey {
 }
 
 
-extension Request {
-    var appConfiguration: AppConfiguration {
+public extension Request {
+    internal var appConfiguration: AppConfiguration {
         self.application.appConfiguration
     }
     

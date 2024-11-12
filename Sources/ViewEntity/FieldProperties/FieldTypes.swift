@@ -7,7 +7,7 @@
 
 import Vapor
 
-enum RefOptionFieldCodingKeys: String, CodingKey {
+public enum RefOptionFieldCodingKeys: String, CodingKey {
     case registerName, options, isButton, view
 }
 public struct RefOptionField: Encodable, Sendable {

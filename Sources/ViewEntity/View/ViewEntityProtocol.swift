@@ -10,14 +10,14 @@ import Fluent
 
 
 
-protocol ViewEntityProtocol: ViewProtocol, SimpleViewEntityProtocol {
+public protocol ViewEntityProtocol: ViewProtocol, SimpleViewEntityProtocol {
     func responseEncoder(from: [EntityCodable]) -> ResponseEncoded
     func responseEncoder(from: [EntityCodable], lastLimit: Int) -> ResponseEncoded
     func responseEncoder(from: EntityCodable) -> ResponseEncoded
     static func currentOptions(customOptions: [String : [Option]]?,field: FieldProtocol, view: inout View<T>, database: Database) async throws -> [Option]
 }
 
-extension ViewEntityProtocol {
+public extension ViewEntityProtocol {
     
     var searchableDBFields: [String] { T.entityConfiguration.searchableDBFields }
     var recalculateTriggerFields: [String] { [] }
@@ -60,6 +60,6 @@ extension ViewEntityProtocol {
     
 }
 
-extension ViewEntityProtocol where T: RecalculateProtocol {
+public extension ViewEntityProtocol where T: RecalculateProtocol {
     var recalculateTriggerFields: [String] { T.recalculateTriggerFields }
 }

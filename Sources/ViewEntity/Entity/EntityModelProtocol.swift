@@ -12,7 +12,7 @@ import FluentSQL
 import MySQLKit
 import SwiftDate
 
-protocol EntityModelProtocol: EntityProtocol, Equatable, Content, FluentKit.Fields, Model {
+public protocol EntityModelProtocol: EntityProtocol, Equatable, Content, FluentKit.Fields, Model {
     /// ID container to hold and pass entity ID. Optional for non yet existing entity
     var idContainer: IDContainer? { get }
     
@@ -39,7 +39,7 @@ protocol EntityModelProtocol: EntityProtocol, Equatable, Content, FluentKit.Fiel
     
 }
 
-extension EntityModelProtocol {
+public extension EntityModelProtocol {
     /// Initialize ID container with current enttiy id
     var idContainer: IDContainer? { IDContainer(id: self.id) }
     /// Default implementation of query builders that returns pure unmodified query
@@ -80,7 +80,7 @@ extension EntityModelProtocol {
     static func customOptions(request: Request) async throws -> [String:[Option]]? { nil }
 }
 
-extension EntityModelProtocol {
+public extension EntityModelProtocol {
     /// Returns sort direction from query. Used from get entity method for datagrid list
     static func getSortDirection(request: Request) -> DatabaseQuery.Sort.Direction {
         if let direction: String = request.query["sortDirection"] {
@@ -242,7 +242,7 @@ extension EntityModelProtocol {
     static func count(query: QueryBuilder<Self>) async throws -> Int { try await query.count() }
 }
 
-extension EntityModelProtocol {
+public extension EntityModelProtocol {
     /// Conforms to equatable by comparing entity id
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id

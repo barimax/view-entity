@@ -7,7 +7,7 @@
 
 import Vapor
 
-protocol DTOResponsable: EntityCodable, Content {
+public protocol DTOResponsable: EntityCodable, Content {
     associatedtype M: DTOProtocol
     func toModel(request: Request) async throws -> M
     static func fromModel(entity: M) throws -> Self

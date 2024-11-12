@@ -6,22 +6,22 @@
 //
 import Fluent
 
-struct EntityProperty<T, V>: FieldProtocol where T: Model, V: Codable, V: Sendable {
-    let keyField: String
-    let name: String
-    var fieldType: FieldType
-    let dataType: DataType
-    let label: String
-    var required: Bool
-    var disabled: Bool
-    let order: Int
-    let width: Int
-    let ref: OptionableProtocol.Type?
-    let nestedRef: RefViewEntityProtocol.Type?
-    let agregate: [Agregate]?
-    let keyPath: KeyPath<T, FieldProperty<T, V>>?
+public struct EntityProperty<T, V>: FieldProtocol where T: Model, V: Codable, V: Sendable {
+    public let keyField: String
+    public let name: String
+    public var fieldType: FieldType
+    public let dataType: DataType
+    public let label: String
+    public var required: Bool
+    public var disabled: Bool
+    public let order: Int
+    public let width: Int
+    public let ref: OptionableProtocol.Type?
+    public let nestedRef: RefViewEntityProtocol.Type?
+    public let agregate: [Agregate]?
+    public let keyPath: KeyPath<T, FieldProperty<T, V>>?
     
-    init(keyField: String,
+    public init(keyField: String,
          name n: String,
          fieldType f: FieldType,
          dataType t: DataType,

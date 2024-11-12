@@ -10,12 +10,12 @@ import Fluent
 import SwiftDate
 
 
-protocol OptionableEntityProtocol: OptionableProtocol  {
+public protocol OptionableEntityProtocol: OptionableProtocol  {
     static var optionField: AnyKeyPath { get }
     static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [Option]
 //    var id: UUID? { get set }
 }
-extension OptionableEntityProtocol where Self: EntityModelProtocol  {
+public extension OptionableEntityProtocol where Self: EntityModelProtocol  {
     static func view(_ v: [String]) async throws -> SimpleViewProtocol? {
         return SimpleView<Self>(loadedViewsRegisterNames: v)
     }
@@ -48,7 +48,7 @@ extension OptionableEntityProtocol where Self: EntityModelProtocol  {
     
 }
 
-extension OptionableEntityProtocol where Self: SelfSiblingProtocol {
+public extension OptionableEntityProtocol where Self: SelfSiblingProtocol {
     static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [Option] {
         guard let field = Self.entityConfiguration.fields.first(where: { field in field.name == fieldName}) else {
             throw Abort(.badRequest, reason: "Грешка в името на полето.")

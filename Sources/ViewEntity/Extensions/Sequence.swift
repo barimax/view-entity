@@ -5,7 +5,7 @@
 //  Created by Georgie Ivanov on 20.10.24.
 //
 
-extension Sequence {
+public extension Sequence {
     func asyncMap<T>(
         _ transform: (Element) async throws -> T
     ) async rethrows -> [T] {

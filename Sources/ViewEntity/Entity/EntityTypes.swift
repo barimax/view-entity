@@ -6,7 +6,7 @@
 //
 
 /// Structure to decode get filter parameters
-struct FilterParam: Decodable {
+public struct FilterParam: Decodable {
     var name: [String]?
     var value: [String]?
 }

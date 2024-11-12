@@ -7,11 +7,11 @@
 
 import Fluent
 
-protocol RefViewEntityModelProtocol: RefViewEntityProtocol {
+public protocol RefViewEntityModelProtocol: RefViewEntityProtocol {
     associatedtype F: RefViewEntityProtocol
     static var isDocument: Bool { get }
 }
-extension RefViewEntityModelProtocol {
+public extension RefViewEntityModelProtocol {
     static var isDocument: Bool { false }
     static func refView(refOptions ro: [String:RefOptionField], refViews rw: [String: RefViewProtocol]) -> RefViewProtocol {
         RefView<Self>.load(refOptions: ro, refViews: rw)

@@ -6,12 +6,12 @@
 //
 import Vapor
 
-extension Application {
+public extension Application {
     var register: Register {
         Register()
     }
 }
-struct Register {
+public struct Register {
     private var store: [EntityProtocol.Type] = []
     
     var all: [EntityProtocol.Type] {

@@ -3,8 +3,8 @@
 
 import Vapor
 
-extension Application {
-    public func loadViewEntityRoutes(routes: Vapor.RoutesBuilder) throws {
+public extension Application {
+    func loadViewEntityRoutes(routes: Vapor.RoutesBuilder) throws {
         try routes.register(collection: ViewEntityController())
     }
 }

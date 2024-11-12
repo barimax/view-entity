@@ -5,7 +5,7 @@
 //  Created by Georgie Ivanov on 20.10.24.
 //
 
-protocol RefViewProtocol: Codable, Sendable {
+public protocol RefViewProtocol: Codable, Sendable {
     var fields: [FieldProtocol] { get set }
     var refOptions: [String:RefOptionField] { get set }
     var refViews: [String: RefViewProtocol] { get set }
@@ -15,7 +15,7 @@ protocol RefViewProtocol: Codable, Sendable {
 private enum RefViewCodingKeys: String, CodingKey {
     case fields, refOptions, refViews, isDocument
 }
-extension RefViewProtocol {
+public extension RefViewProtocol {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: RefViewCodingKeys.self)
         try container.encode(fields.map { EncodableWrapper($0) }, forKey: .fields)

@@ -5,7 +5,7 @@
 //  Created by Georgie Ivanov on 20.10.24.
 //
 
-extension Encodable {
+public extension Encodable {
   fileprivate func encode(to container: inout SingleValueEncodingContainer) throws {
     try container.encode(self)
   }

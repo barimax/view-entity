@@ -8,10 +8,10 @@
 import Fluent
 import Vapor
 
-protocol CommonSiblingProtocol: DTOProtocol {
+public protocol CommonSiblingProtocol: DTOProtocol {
     static func siblingLoader<ON: EntityModelProtocol>(on: ON.Type, value:[IDContainer]?, database: Database) async throws -> [ON]
 }
-extension CommonSiblingProtocol {
+public extension CommonSiblingProtocol {
     static func siblingLoader<ON: EntityModelProtocol>(on: ON.Type, value:[IDContainer]?, database: Database) async throws -> [ON] {
         let containers = value ?? []
         if containers.isEmpty {

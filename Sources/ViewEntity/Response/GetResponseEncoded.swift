@@ -7,7 +7,7 @@
 
 import Vapor
 
-struct GetResponseEncoded: AsyncResponseEncodable, Encodable {
+public struct GetResponseEncoded: AsyncResponseEncodable, Encodable {
     public func encodeResponse(for request: Request) async throws -> Response {
         do {
             let data = try request.appConfiguration.encoder.encode(self)

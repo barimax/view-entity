@@ -23,7 +23,7 @@ enum FieldCodingKeys: String, CodingKey {
     case fieldType, dataType, width, name, required, label, order, disabled, agregate
 }
 
-protocol FieldProtocol: Encodable {
+public protocol FieldProtocol: Encodable {
     var keyField: String { get }
     var name: String { get }
     var fieldType: FieldType { get set }
@@ -38,7 +38,7 @@ protocol FieldProtocol: Encodable {
     var agregate: [Agregate]? { get }
 }
 
-extension FieldProtocol {
+public extension FieldProtocol {
     // Encodable conformance
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: FieldCodingKeys.self)

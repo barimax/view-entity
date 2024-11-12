@@ -5,7 +5,7 @@
 //  Created by Georgie Ivanov on 20.10.24.
 //
 
-func debugPrint(_ str: String, prefix: String = "[JORO]") {
+public func debugPrint(_ str: String, prefix: String = "[JORO]") {
 #if DEBUG
     print("\(prefix) \(str)")
 #endif

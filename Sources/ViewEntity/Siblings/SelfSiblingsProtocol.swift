@@ -8,14 +8,14 @@
 import Vapor
 import Fluent
 
-protocol SelfSiblingProtocol: CommonSiblingProtocol {
+public protocol SelfSiblingProtocol: CommonSiblingProtocol {
     associatedtype M: Model
     static var selfPivotKeyPath: KeyPath<Self, SiblingsProperty<Self, Self, M>> { get }
     static var selfDataKeyPath: ReferenceWritableKeyPath<Self, [Self]> { get }
     static func selfReferenceUpdate(oldEntity: Self, newEntity: Self, database: Database, request: Request) async throws
     static func selfReferenceCreate(newEntity: Self, database: Database, request: Request) async throws
 }
-extension SelfSiblingProtocol {
+public extension SelfSiblingProtocol {
     static func selfReferenceUpdate(oldEntity: Self, newEntity: Self, database: Database, request: Request) async throws {
         try await oldEntity[keyPath: Self.selfPivotKeyPath].load(on: database)
         try await oldEntity[keyPath: Self.selfDataKeyPath].asyncForEach { oldReference in
@@ -37,7 +37,7 @@ extension SelfSiblingProtocol {
     }
 }
 /// If entity had field with reference to the same type
-extension EntityModelProtocol where Self: SelfSiblingProtocol, Self: OptionableEntityProtocol, Self == Self.DTO.M {
+public extension EntityModelProtocol where Self: SelfSiblingProtocol, Self: OptionableEntityProtocol, Self == Self.DTO.M {
     static func updateTransaction(oldEntity: Self, newEntity: Self, database: Database, request: Request) async throws -> EntityCodable {
         try await Self.update(oldEntity: oldEntity, newEntity: newEntity, database: database, request: request)
         try await Self.selfReferenceUpdate(oldEntity: oldEntity, newEntity: newEntity, database: database, request: request)

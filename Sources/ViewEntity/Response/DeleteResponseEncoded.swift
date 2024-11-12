@@ -6,7 +6,7 @@
 
 import Vapor
 
-struct DeleteResponseEncoded: AsyncResponseEncodable, Encodable {
+public struct DeleteResponseEncoded: AsyncResponseEncodable, Encodable {
     public func encodeResponse(for request: Request) async throws -> Response {
         do {
             let data = try request.appConfiguration.encoder.encode(self)

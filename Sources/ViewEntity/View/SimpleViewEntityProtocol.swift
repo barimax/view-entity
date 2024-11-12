@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol SimpleViewEntityProtocol: SimpleViewProtocol {
+public protocol SimpleViewEntityProtocol: SimpleViewProtocol {
     associatedtype T: EntityModelProtocol
 }
 
-extension SimpleViewEntityProtocol {
+public extension SimpleViewEntityProtocol {
     var fields: [FieldProtocol] {
         get {
             var fields = T.entityConfiguration.fields

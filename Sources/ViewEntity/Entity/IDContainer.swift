@@ -8,7 +8,7 @@
 import Foundation
 import Vapor
 
-struct IDContainer: Codable {
+public struct IDContainer: Codable {
     let id: String?
     var optionalUUID: UUID? {
         if let idString = self.id {

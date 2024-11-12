@@ -5,18 +5,18 @@
 //  Created by Georgie Ivanov on 20.10.24.
 //
 
-struct RefView<F: RefViewEntityModelProtocol>: RefViewModelProtocol {
-    var refOptions: [String:RefOptionField] = [:]
-    var refViews: [String: RefViewProtocol] = [:]
-    static func load(refOptions ro: [String:RefOptionField], refViews rw: [String: RefViewProtocol]) -> RefViewProtocol {
+public struct RefView<F: RefViewEntityModelProtocol>: RefViewModelProtocol {
+    public var refOptions: [String:RefOptionField] = [:]
+    public var refViews: [String: RefViewProtocol] = [:]
+    public static func load(refOptions ro: [String:RefOptionField], refViews rw: [String: RefViewProtocol]) -> RefViewProtocol {
         var refView = RefView()
         refView.refOptions = ro
         refView.refViews = rw
         return refView
     }
-    init(){}
+    public init(){}
     
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         self.init()
     }
 }

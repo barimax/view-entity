@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol SimpleViewProtocol: Encodable, Sendable {
+public protocol SimpleViewProtocol: Encodable, Sendable {
     var fields: [FieldProtocol] { set get }
     var registerName: String { get }
     var singleName: String { get }
@@ -17,7 +17,7 @@ protocol SimpleViewProtocol: Encodable, Sendable {
     var isDocument: Bool { get }
 }
 
-extension SimpleViewProtocol {
+public extension SimpleViewProtocol {
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: ViewCodingKeys.self)
         try container.encode(singleName, forKey: .singleName)

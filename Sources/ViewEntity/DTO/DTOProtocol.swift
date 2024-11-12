@@ -8,14 +8,14 @@
 import Vapor
 import FluentKit
 
-protocol DTOProtocol: EntityModelProtocol {
+public protocol DTOProtocol: EntityModelProtocol {
     associatedtype DTO: DTOResponsable
 }
 
 /// If entity support DTO transport
 /// Decode request from DTO object to entity type
 /// Returns DTO object from entity after create and update transactions used in save static method
-extension EntityModelProtocol where Self: DTOProtocol, Self == Self.DTO.M {
+public extension EntityModelProtocol where Self: DTOProtocol, Self == Self.DTO.M {
     static func decodeRequest(request: Request) async throws -> Self.DTO.M {
         print("[JORO] Decode DTO request.")
         let dto = try request.content.decode(DTO.self)

@@ -9,9 +9,9 @@ import Foundation
 import Vapor
 import FluentKit
 
-protocol EntityCodable: Codable {}
+public protocol EntityCodable: Codable {}
 
-protocol EntityProtocol: EntityCodable {
+public protocol EntityProtocol: EntityCodable {
     
     static var registerName: String { get }
     static var entityConfiguration: EntityConfiguration { get set }
@@ -47,7 +47,7 @@ protocol EntityProtocol: EntityCodable {
     init()
 }
 
-extension EntityProtocol {
+public extension EntityProtocol {
     static var fromFile: Bool { false } // default for regular entity
     static var isDateOptimized: Bool { false } // default for regular entity
     static var dateOptimizedPropertyName: String? { nil } // default for regular entity

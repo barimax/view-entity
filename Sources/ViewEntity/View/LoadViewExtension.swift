@@ -8,7 +8,7 @@
 import Vapor
 import Fluent
 
-extension ViewEntityProtocol {
+public extension ViewEntityProtocol {
     
     static func getRefOptionView(field: FieldProtocol, view: inout View<T>, isFullLoad: Bool) async throws -> SimpleViewProtocol? {
         if !view.loadedViewsRegisterNames.contains(field.ref!.registerName) || isFullLoad {

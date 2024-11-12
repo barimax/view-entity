@@ -9,7 +9,7 @@ import Vapor
 import Fluent
 import FluentSQL
 
-protocol ViewProtocol: SimpleViewProtocol {
+public protocol ViewProtocol: SimpleViewProtocol {
     var searchableDBFields: [String] { get }
     var refOptions: [String:RefOptionField] { get set }
     var backRefs: [BackRefs] { get set }
@@ -37,7 +37,7 @@ protocol ViewProtocol: SimpleViewProtocol {
     init(request: Request, loadedViewsRegisterNames: [String], transactionDB: Database?) async throws
 }
 
-extension ViewProtocol {
+public extension ViewProtocol {
     
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: ViewCodingKeys.self)

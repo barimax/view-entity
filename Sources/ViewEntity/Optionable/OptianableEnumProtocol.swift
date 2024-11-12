@@ -7,13 +7,13 @@
 
 import Fluent
 
-protocol OptionableEnumProtocol: OptionableProtocol, CaseIterable {
+public protocol OptionableEnumProtocol: OptionableProtocol, CaseIterable {
     
     func getName() -> String?
     
     static func prepareEnumMigration(database: Database) async throws -> DatabaseSchema.DataType
 }
-extension OptionableEnumProtocol {
+public extension OptionableEnumProtocol {
     static var isButton: Bool {
         return false
     }
@@ -21,7 +21,7 @@ extension OptionableEnumProtocol {
     static func view(_ v: [String]) async throws -> SimpleViewProtocol? { nil }
 }
 
-extension OptionableEnumProtocol where Self: RawRepresentable, Self.RawValue == String {
+public extension OptionableEnumProtocol where Self: RawRepresentable, Self.RawValue == String {
     static func options(database db: Database) async throws -> [Option] {
         var res: [Option] = []
         if let allCases = Self.allCases as? [Self] {

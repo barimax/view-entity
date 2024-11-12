@@ -7,8 +7,8 @@
 
 import Vapor
 
-struct DTOResponseEncoded: AsyncResponseEncodable, Encodable {
-    func encodeResponse(for request: Request) async throws -> Response {
+public struct DTOResponseEncoded: AsyncResponseEncodable, Encodable {
+    public func encodeResponse(for request: Request) async throws -> Response {
         do {
             
             let data = try request.appConfiguration.encoder.encode(self)
