@@ -248,15 +248,15 @@ public extension EntityModelProtocol {
         lhs.id == rhs.id
     }
     
-    static func loadView(_ r: Request, _ v: [String]) async throws -> ViewProtocol? {
-        var view = try await View<Self>.load(req: r, views: v)
+    static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> ViewProtocol? {
+        var view = try await View<Self>.load(req: r, views: v, full: f)
         print("[JORO] View loaded. Start count")
         view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
         print("[JORO] Rows count \(view.rowsCount)")
         return view
     }
     
-    static func pureView(_ r: Request) async throws -> ViewProtocol {
+    static func pureView(_ r: Request) throws -> ViewProtocol {
         try View<Self>(request: r)
     }
     
