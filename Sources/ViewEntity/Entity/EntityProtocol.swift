@@ -11,7 +11,7 @@ import FluentKit
 
 public protocol EntityCodable: Codable {}
 
-public protocol EntityProtocol: EntityCodable {
+public protocol EntityProtocol: EntityCodable, MenuProtocol {
     
     static var registerName: String { get }
     static var entityConfiguration: EntityConfiguration { get set }
