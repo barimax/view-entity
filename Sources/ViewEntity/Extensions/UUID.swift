@@ -22,3 +22,9 @@ public extension UUID {
         }.joined()
     }
 }
+
+public extension UUID {
+    var idContainer: IDContainer? {
+        IDContainer(id: self)
+    }
+}
