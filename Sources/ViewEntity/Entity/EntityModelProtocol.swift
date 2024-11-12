@@ -257,10 +257,16 @@ public extension EntityModelProtocol {
     }
     
     static func pureView(_ r: Request) async throws -> ViewProtocol {
-        try await View<Self>(request: r)
+        try View<Self>(request: r)
     }
     
-    
+    static func initView(
+        request r: Request,
+        loadedViewsRegisterNames views: [String] = [],
+        transactionDB db: Database? = nil
+    ) throws -> View<Self> {
+        return try View<Self>.init(request: r, loadedViewsRegisterNames: views, transactionDB: db)
+    }
 }
 
 public extension EntityModelProtocol where Self: LoadAllViewProtocol {

@@ -37,7 +37,7 @@ public struct View<T: EntityModelProtocol>: ViewEntityProtocol {
     public let database: Database
     public var loadedViewsRegisterNames: [String]
     
-    public init(request r: Request, loadedViewsRegisterNames views: [String] = [], transactionDB db: Database? = nil) async throws {
+    public init(request r: Request, loadedViewsRegisterNames views: [String] = [], transactionDB db: Database? = nil) throws {
         self.request = r
         self.loadedViewsRegisterNames = views
         self.database = try db ?? r.companyDatabase()
