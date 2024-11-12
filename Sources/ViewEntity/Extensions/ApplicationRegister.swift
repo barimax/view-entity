@@ -14,19 +14,19 @@ public extension Application {
 public struct Register {
     private var store: [EntityProtocol.Type] = []
     
-    var all: [EntityProtocol.Type] {
+    public var all: [EntityProtocol.Type] {
         self.store
     }
     
-    mutating func add(type: EntityProtocol.Type) {
+    public mutating func add(type: EntityProtocol.Type) {
         self.store.append(type)
     }
     
-    mutating func add(types: [EntityProtocol.Type]) {
+    public mutating func add(types: [EntityProtocol.Type]) {
         self.store.append(contentsOf: types)
     }
     
-    func get(key: String) -> EntityProtocol.Type? {
+    public func get(key: String) -> EntityProtocol.Type? {
         self.store.first(where: { $0.registerName == key })
     }
 }
