@@ -67,10 +67,10 @@ public extension ViewEntityProtocol {
         print("[JORO] refViewsData: \(refViewsData.map { (k,v) in return k })")
         let refViews = Dictionary(uniqueKeysWithValues: refViewsData)
         
-        let backRefs = req.application.register.all
+        let backRefs = try req.application.register.all
             .flatMap { entityType -> [BackRefs] in
-                return entityType.entityConfiguration.fields.filter { $0.ref != nil }.filter { $0.ref!.registerName == view.registerName }.map { field -> BackRefs in
-                    var backRef = BackRefs(entity: req.application.register.get(key: entityType.registerName)!)
+                return try entityType.entityConfiguration.fields.filter { $0.ref != nil }.filter { $0.ref!.registerName == view.registerName }.map { field -> BackRefs in
+                    var backRef = try BackRefs(entity: req.application.register.get(key: entityType.registerName)!)
                     backRef.registerName = entityType.registerName
                     backRef.singleName = entityType.entityConfiguration.singleName
                     backRef.pluralName = entityType.entityConfiguration.pluralName

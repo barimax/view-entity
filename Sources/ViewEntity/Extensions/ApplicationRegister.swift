@@ -6,12 +6,28 @@
 //
 import Vapor
 
+struct RegisterKey: StorageKey {
+    typealias Value = Register
+}
+
 public extension Application {
     var register: Register {
-        Register()
+        get throws {
+            guard let register = self.storage[RegisterKey.self] else {
+                throw Abort(.badRequest)
+            }
+            return register
+        }
+        
+        
+    }
+    func initModelsRegister(types: [EntityProtocol.Type]) {
+        var register = Register()
+        register.add(types: types)
+        self.storage[RegisterKey.self] = register
     }
 }
-public struct Register {
+public struct Register: Sendable {
     private var store: [EntityProtocol.Type] = []
     
     public var all: [EntityProtocol.Type] {

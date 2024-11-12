@@ -57,10 +57,11 @@ public extension Request {
     }
     
     func loadEntityType() throws {
-        guard let registerName = self.parameters.get("registerName") else {
+        guard let registerName = self.parameters.get("registerName"),
+              let entityType = try? self.application.register.get(key: registerName) else {
             throw Abort(.badRequest)
         }
-        self.storage[EntityTypeKey.self] = self.application.register.get(key: registerName)
+        self.storage[EntityTypeKey.self] = entityType
     }
     
     func setView(newValue: ViewProtocol) {
