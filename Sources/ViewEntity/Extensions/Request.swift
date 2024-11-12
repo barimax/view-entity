@@ -53,7 +53,7 @@ public extension Request {
     
     func loadAll() async throws {
         try loadEntityType()
-        self.storage[ViewKey.self] = try await self.entityType.loadView(self, [])
+        self.storage[ViewKey.self] = try await self.entityType.loadView(self, [], full: false)
     }
     
     func loadEntityType() throws {
