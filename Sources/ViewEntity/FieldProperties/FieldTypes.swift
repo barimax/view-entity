@@ -15,7 +15,7 @@ public struct RefOptionField: Encodable, Sendable {
     public var options: [SelectOption]
     public var isButton: Bool
     let view: SimpleViewProtocol?
-    init(registerName: String, options: [SelectOption], isButton: Bool, view: SimpleViewProtocol?) {
+    public init(registerName: String, options: [SelectOption], isButton: Bool, view: SimpleViewProtocol?) {
         self.registerName = registerName
         self.options = options
         self.isButton = isButton
