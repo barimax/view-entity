@@ -22,12 +22,12 @@ public extension OptionableEnumProtocol {
 }
 
 public extension OptionableEnumProtocol where Self: RawRepresentable, Self.RawValue == String {
-    static func options(database db: Database) async throws -> [Option] {
-        var res: [Option] = []
+    static func options(database db: Database) async throws -> [SelectOption] {
+        var res: [SelectOption] = []
         if let allCases = Self.allCases as? [Self] {
             for option in allCases {
                 if let name = option.getName() {
-                    res.append(Option(value: option.rawValue, text: name))
+                    res.append(SelectOption(value: option.rawValue, text: name))
                 }
             }
         }

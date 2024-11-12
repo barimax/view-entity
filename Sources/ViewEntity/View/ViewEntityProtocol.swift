@@ -14,7 +14,7 @@ public protocol ViewEntityProtocol: ViewProtocol, SimpleViewEntityProtocol {
     func responseEncoder(from: [EntityCodable]) -> ResponseEncoded
     func responseEncoder(from: [EntityCodable], lastLimit: Int) -> ResponseEncoded
     func responseEncoder(from: EntityCodable) -> ResponseEncoded
-    static func currentOptions(customOptions: [String : [Option]]?,field: FieldProtocol, view: inout View<T>, database: Database) async throws -> [Option]
+    static func currentOptions(customOptions: [String : [SelectOption]]?,field: FieldProtocol, view: inout View<T>, database: Database) async throws -> [SelectOption]
 }
 
 public extension ViewEntityProtocol {
@@ -37,7 +37,7 @@ public extension ViewEntityProtocol {
         try await T.decodeRequest(request: request)
     }
     
-    static func currentOptions(customOptions: [String : [Option]]?,field: FieldProtocol, view: inout View<T>, database: Database) async throws -> [Option] {
+    static func currentOptions(customOptions: [String : [SelectOption]]?,field: FieldProtocol, view: inout View<T>, database: Database) async throws -> [SelectOption] {
         if let customOpts = customOptions {
             view.forceServerLoad = true
             if let unwrappedOptions = customOpts[field.name] {

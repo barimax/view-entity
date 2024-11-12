@@ -12,10 +12,10 @@ public enum RefOptionFieldCodingKeys: String, CodingKey {
 }
 public struct RefOptionField: Encodable, Sendable {
     public let registerName: String
-    public var options: [Option]
+    public var options: [SelectOption]
     public var isButton: Bool
     let view: SimpleViewProtocol?
-    init(registerName: String, options: [Option], isButton: Bool, view: SimpleViewProtocol?) {
+    init(registerName: String, options: [SelectOption], isButton: Bool, view: SimpleViewProtocol?) {
         self.registerName = registerName
         self.options = options
         self.isButton = isButton
@@ -57,11 +57,11 @@ public struct BackRefs: Encodable, Sendable {
     }
     
 }
-public struct Option: Codable, Equatable, Content, Sendable {
-    var value: String
-    var text: String
-    var addOn: String?
-    var enabled: Bool
+public struct SelectOption: Codable, Equatable, Content, Sendable {
+    public var value: String
+    public var text: String
+    public var addOn: String?
+    public var enabled: Bool
     public init(value v: String, text t: String, enabled e: Bool = true){
         self.value = v
         self.text = t
@@ -71,5 +71,5 @@ public struct Option: Codable, Equatable, Content, Sendable {
 
 public struct BackRefOptions: Encodable {
     let backRef: BackRefs
-    let options: [Option]
+    let options: [SelectOption]
 }

@@ -77,7 +77,7 @@ public extension EntityModelProtocol {
     }
     
     /// Custom options default implementation returns nil
-    static func customOptions(request: Request) async throws -> [String:[Option]]? { nil }
+    static func customOptions(request: Request) async throws -> [String:[SelectOption]]? { nil }
 }
 
 public extension EntityModelProtocol {

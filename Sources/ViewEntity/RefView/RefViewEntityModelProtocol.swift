@@ -19,5 +19,5 @@ public extension RefViewEntityModelProtocol {
     static func refView() -> RefViewProtocol {
         RefView<Self>()
     }
-    static func customOptions(db: Database) async throws -> [String:[Option]]? { nil }
+    static func customOptions(db: Database) async throws -> [String:[SelectOption]]? { nil }
 }

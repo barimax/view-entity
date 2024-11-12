@@ -12,26 +12,26 @@ import SwiftDate
 
 public protocol OptionableEntityProtocol: OptionableProtocol  {
     static var optionField: AnyKeyPath { get }
-    static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [Option]
+    static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [SelectOption]
 //    var id: UUID? { get set }
 }
 public extension OptionableEntityProtocol where Self: EntityModelProtocol  {
     static func view(_ v: [String]) async throws -> SimpleViewProtocol? {
         return SimpleView<Self>(loadedViewsRegisterNames: v)
     }
-    static func options(database db: Database) async throws -> [Option] {
+    static func options(database db: Database) async throws -> [SelectOption] {
         return try await Self.query(on: db)
             .all()
             .filter { $0.id != nil }
             .map {
                 let text = $0[keyPath: Self.optionField] is Date ? ($0[keyPath: Self.optionField] as! Date).toFormat("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
-                return Option(value: $0.id!.uuidString, text: text)
+                return SelectOption(value: $0.id!.uuidString, text: text)
             }
     }
     static var isButton: Bool {
         return true
     }
-    static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [Option] {
+    static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [SelectOption] {
         guard let field = Self.entityConfiguration.fields.first(where: { field in field.name == fieldName}) else {
             throw Abort(.badRequest, reason: "Грешка в името на полето.")
         }
@@ -42,14 +42,14 @@ public extension OptionableEntityProtocol where Self: EntityModelProtocol  {
             .filter { $0.id != nil }
             .map {
                 let text = $0[keyPath: Self.optionField] is Date ? ($0[keyPath: Self.optionField] as! Date).toFormat("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
-                return Option(value: $0.id!.uuidString, text: text)
+                return SelectOption(value: $0.id!.uuidString, text: text)
             }
     }
     
 }
 
 public extension OptionableEntityProtocol where Self: SelfSiblingProtocol {
-    static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [Option] {
+    static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [SelectOption] {
         guard let field = Self.entityConfiguration.fields.first(where: { field in field.name == fieldName}) else {
             throw Abort(.badRequest, reason: "Грешка в името на полето.")
         }
@@ -58,7 +58,7 @@ public extension OptionableEntityProtocol where Self: SelfSiblingProtocol {
         }
         return try await result[keyPath: selfPivotKeyPath].get(on: db).map {
             let text = $0[keyPath: Self.optionField] is Date ? ($0[keyPath: Self.optionField] as! Date).toFormat("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
-                return Option(value: $0.id!.uuidString, text: text)
+                return SelectOption(value: $0.id!.uuidString, text: text)
             }
     }
 }

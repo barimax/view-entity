@@ -52,7 +52,7 @@ public extension EntityModelProtocol where Self: SelfSiblingProtocol, Self: Opti
         if let id = createdEntity.id {
             for selfField in selfReferenceFields {
                 debugPrint("\(selfField.name)")
-                let opt: Option = Option(value: id.uuidString, text: "\(createdEntity[keyPath: Self.optionField]  ?? "No string convirtible option.")")
+                let opt: SelectOption = SelectOption(value: id.uuidString, text: "\(createdEntity[keyPath: Self.optionField]  ?? "No string convirtible option.")")
                 if(view.refOptions[selfField.name]?.options.isEmpty ?? true){
                     view.refOptions[selfField.name] = RefOptionField(registerName: view.registerName, options: [opt], isButton: true, view: nil)
                 }else{
