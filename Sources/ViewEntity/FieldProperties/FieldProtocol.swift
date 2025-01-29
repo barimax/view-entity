@@ -9,7 +9,7 @@ import Foundation
 import FluentKit
 
 public enum DataType: String, Encodable, Sendable {
-    case string, integer, float, bool, object, array, ref, datetime, uid, image, svg
+    case string, integer, float, bool, object, array, ref, datetime, uid, image, svg, iban
 }
 public enum FieldType: String, Encodable, Sendable {
     case text, number, select, selectMultiple, checkbox, radio, switchButton, textarea, date, time, dateTime, nestedForm, uid, hidden, nestedArray, rowDisplay, file, currency
