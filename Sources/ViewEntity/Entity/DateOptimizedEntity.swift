@@ -6,44 +6,20 @@
 //
 
 import Fluent
-import SwiftDate
+import SwiftMoment
 import Foundation
-
-public enum DateOptimizedTimeUnit {
-    case year, month, day
-    var timeUnit: Calendar.Component {
-        switch(self){
-        case .day:
-            return .day
-        case .month:
-            return .month
-        case .year:
-            return .year
-        }
-    }
-    func dateComponents(v: Int) -> DateComponents {
-        switch(self){
-        case .day:
-            return v.days
-        case .month:
-            return v.months
-        case .year:
-            return v.years
-        }
-    }
-}
 
 public protocol DateOptimizedGetAllProtocol where Self: EntityModelProtocol {
     static var optimizedByKeyPath: KeyPath<Self, FieldProperty<Self, Date>> { get }
     static var optimizedPropertyName: String { get }
-    static var timeUnit: DateOptimizedTimeUnit { get }
+    static var timeUnit: TimeUnit { get }
     static func optimizeByDate(query: QueryBuilder<Self>) -> QueryBuilder<Self>
     
 }
 public extension DateOptimizedGetAllProtocol {
-    static var timeUnit: DateOptimizedTimeUnit { return .year }
+    static var timeUnit: TimeUnit { return .Years }
     static func optimizeByDate(query: QueryBuilder<Self>) -> QueryBuilder<Self> {
-        let date = (Date.now - Self.timeUnit.dateComponents(v: 1)).dateAtStartOf(Self.timeUnit.timeUnit)
+        let date = moment().subtract(1, Self.timeUnit).startOf(.Years).date
         
         return query
             .filter(Self.optimizedByKeyPath > date)

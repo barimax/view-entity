@@ -7,7 +7,7 @@
 import Foundation
 import Vapor
 import Fluent
-import SwiftDate
+import SwiftMoment
 
 
 public protocol OptionableEntityProtocol: OptionableProtocol  {
@@ -24,7 +24,8 @@ public extension OptionableEntityProtocol where Self: EntityModelProtocol  {
             .all()
             .filter { $0.id != nil }
             .map {
-                let text = $0[keyPath: Self.optionField] is Date ? ($0[keyPath: Self.optionField] as! Date).toFormat("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
+                
+                let text = $0[keyPath: Self.optionField] is Date ? moment(($0[keyPath: Self.optionField] as! Date)).format("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
                 return SelectOption(value: $0.id!.uuidString, text: text)
             }
     }
@@ -41,7 +42,7 @@ public extension OptionableEntityProtocol where Self: EntityModelProtocol  {
             .all()
             .filter { $0.id != nil }
             .map {
-                let text = $0[keyPath: Self.optionField] is Date ? ($0[keyPath: Self.optionField] as! Date).toFormat("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
+                let text = $0[keyPath: Self.optionField] is Date ? moment(($0[keyPath: Self.optionField] as! Date)).format("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
                 return SelectOption(value: $0.id!.uuidString, text: text)
             }
     }
@@ -57,7 +58,7 @@ public extension OptionableEntityProtocol where Self: SelfSiblingProtocol {
             throw Abort(.badRequest, reason: "Missing type.")
         }
         return try await result[keyPath: selfPivotKeyPath].get(on: db).map {
-            let text = $0[keyPath: Self.optionField] is Date ? ($0[keyPath: Self.optionField] as! Date).toFormat("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
+            let text = $0[keyPath: Self.optionField] is Date ? moment(($0[keyPath: Self.optionField] as! Date)).format("dd.MM.yyyy г.") : "\($0[keyPath: Self.optionField] ?? "No string convirtible option.")"
                 return SelectOption(value: $0.id!.uuidString, text: text)
             }
     }

@@ -45,7 +45,7 @@ public extension EntityModelProtocol where Self: SelfSiblingProtocol, Self: Opti
     }
     static func createTransaction(createdEntity: Self, database: Database, request: Request) async throws -> EntityCodable {
         try await Self.create(newEntity: createdEntity, database: database, request: request)
-        var view = await request.isViewLoaded ? try request.entityView : try View<Self>(request: request)
+        var view = request.isViewLoaded ? try request.entityView : try View<Self>(request: request)
         debugPrint("View: \(view)")
         debugPrint("Current id: \(String(describing: createdEntity.id))")
         let selfReferenceFields = view.fields.filter({field in field.ref is SelfReference<Self>.Type })

@@ -10,7 +10,7 @@ import Fluent
 import FluentKit
 import FluentSQL
 import MySQLKit
-import SwiftDate
+import SwiftMoment
 
 public protocol EntityModelProtocol: EntityProtocol, Equatable, Content, FluentKit.Fields, Model {
     /// ID container to hold and pass entity ID. Optional for non yet existing entity
@@ -133,11 +133,8 @@ public extension EntityModelProtocol {
                          if decoded.count == 2,
                             let start = decoded[0],
                             let end = decoded[1] {
-                             let region = Region(calendar: Calendars.gregorian, zone: Zones.europeSofia, locale: Locales.bulgarian)
-                             let startDate = Date(milliseconds: start, region: region).dateAtStartOf(.day)
-                             let endDate = Date(milliseconds: end).dateAtEndOf(.day)
-                             print("[JORO] \(startDate)")
-                             print("[JORO] \(endDate)")
+                             let startDate = moment(start).startOf(TimeUnit.Days).date
+                             let endDate = moment(end).endOf(TimeUnit.Days).date
                              tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .greaterThanOrEqual, startDate)
                              tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .lessThanOrEqual, endDate)
                          }
@@ -208,7 +205,7 @@ public extension EntityModelProtocol {
                 let codableEntity = try await request.companyDatabase().transaction { database -> EntityCodable in
                     return try await Self.updateTransaction(oldEntity: oldEntity, newEntity: entity, database: database, request: request)
                 }
-                let view = try await View<Self>(request: request)
+                let view = try View<Self>(request: request)
                 return ResponseEncoded(view: view, entity: codableEntity)
             }else{
                 
@@ -216,7 +213,7 @@ public extension EntityModelProtocol {
                 let codableEntity = try await request.companyDatabase().transaction { database -> EntityCodable in
                     return try await Self.createTransaction(createdEntity: entity, database: database, request: request)
                 }
-                let view: ViewProtocol = try request.isViewLoaded ? request.entityView : await View<Self>(request: request)
+                let view: ViewProtocol = try request.isViewLoaded ? request.entityView : View<Self>(request: request)
                 return ResponseEncoded(view: view, entity: codableEntity)
             }
         }catch{
