@@ -190,6 +190,7 @@ public extension EntityModelProtocol {
         let filter = try request.query.get(FilterParam.self, at: "filter")
         let tempQuery = try Self.getFilterQuery(db: request.companyDatabase(), filter: filter)
         let getAllQuery = try self.allQuery(query: Self.getSortQuery(query: tempQuery, sortBy: sortBy, sortDirection: sortDirection))
+       
         let result = try await getAllQuery.all()
         return GetResponseEncoded(propertyName: sortBy ?? "", sortDirection: sortDirection.description, list: result, lastId: nil)
     }
@@ -263,6 +264,43 @@ public extension EntityModelProtocol {
         transactionDB db: Database? = nil
     ) throws -> View<Self> {
         return try View<Self>.init(request: r, loadedViewsRegisterNames: views, transactionDB: db)
+    }
+}
+
+extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
+
+    static func view(_ r: Request, _ v: [String] = []) async throws -> ViewProtocol? {
+        var view = try await View<Self>.load(req: r, views: v, full: false)
+        view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
+        return view
+    }
+    static var isDateOptimized: Bool { true }
+    static var dateOptimizedPropertyName: String? { Self.optimizedPropertyName }
+    static func getAllQuery(query: QueryBuilder<Self>, loadAll: Bool) -> QueryBuilder<Self> {
+        if loadAll {
+            return Self.allQuery(query: query)
+        }else{
+            return Self.allQuery(query: Self.optimizeByDate(query: query))
+        }
+
+    }
+
+
+
+    static func get(request: Request) async throws -> GetResponseEncoded {
+        let sortDirection = Self.getSortDirection(request: request)
+        let sortBy: String? = request.query["sortBy"]
+        let filter = try request.query.get(FilterParam.self, at: "filter")
+        let tempQuery = try Self.getFilterQuery(db: request.companyDatabase(), filter: filter)
+        let getAllQuery = sortBy == nil ? tempQuery.sort(Self.optimizedByKeyPath, sortDirection) : try Self.getSortQuery(query: tempQuery, sortBy: sortBy, sortDirection: sortDirection)
+        if let offset: Int = request.query["offset"],
+           let limit: Int = request.query["limit"] {
+            getAllQuery.offset(offset)
+            getAllQuery.limit(limit)
+        }
+
+        let result = try await getAllQuery.all()
+        return GetResponseEncoded(propertyName: Self.optimizedPropertyName, sortDirection: sortDirection.description, list: result, lastId: UUID())
     }
 }
 
