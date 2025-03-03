@@ -285,8 +285,6 @@ extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
 
     }
 
-
-
     static func get(request: Request) async throws -> GetResponseEncoded {
         let sortDirection = Self.getSortDirection(request: request)
         let sortBy: String? = request.query["sortBy"]
