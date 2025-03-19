@@ -262,6 +262,15 @@
       }
     },
     {
+      "identity" : "types-lib",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/barimax/types-lib.git",
+      "state" : {
+        "revision" : "6e0b10064c9112aa4565bad91cad8d4d1ee17b3e",
+        "version" : "0.3.1"
+      }
+    },
+    {
       "identity" : "vapor",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/vapor.git",

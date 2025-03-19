@@ -7,6 +7,7 @@
 
 import Vapor
 import FluentKit
+import TypesLib
 
 
 struct DBConfigurationKey: StorageKey {
@@ -23,7 +24,7 @@ struct EntityTypeKey: StorageKey {
 
 
 public extension Request {
-    internal var appConfiguration: AppConfiguration {
+    internal var appConfiguration: Configuration {
         self.application.appConfiguration
     }
     
