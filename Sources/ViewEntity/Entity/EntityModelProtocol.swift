@@ -269,9 +269,11 @@ public extension EntityModelProtocol {
 
 extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
 
-    static func view(_ r: Request, _ v: [String] = []) async throws -> ViewProtocol? {
-        var view = try await View<Self>.load(req: r, views: v, full: false)
+    static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> ViewProtocol? {
+        var view = try await View<Self>.load(req: r, views: v, full: f)
+        print("[JORO] View loaded. Start count")
         view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
+        print("[JORO] Rows count \(view.rowsCount)")
         return view
     }
     static var isDateOptimized: Bool { true }
