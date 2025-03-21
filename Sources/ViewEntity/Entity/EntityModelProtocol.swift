@@ -267,7 +267,7 @@ public extension EntityModelProtocol {
     }
 }
 
-extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
+public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
 
     static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> ViewProtocol? {
         var view = try await View<Self>.load(req: r, views: v, full: f)
