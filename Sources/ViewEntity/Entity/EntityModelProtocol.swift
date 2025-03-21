@@ -119,13 +119,22 @@ public extension EntityModelProtocol {
                      if entityProperty.fieldType == .select || entityProperty.fieldType == .selectMultiple {
                          let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
                          print("[JORO 1] \(valueReplaced)")
-                         let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: valueReplaced.data(using: .utf8)!)
-                         tempQuery = Self.filterQuery(filter: [name: decoded], query: tempQuery)
+                         if entityProperty.dataType == .string {
+                             let decoded: [String] = try JSONDecoder().decode([String].self, from: valueReplaced.data(using: .utf8)!)
                              tempQuery.group(.or) { or in
-                                 for uuid in decoded {
-                                     or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, uuid)
+                                 for enumValue in decoded {
+                                     or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, enumValue)
                                  }
                              }
+                         }else{
+                             let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: valueReplaced.data(using: .utf8)!)
+                             tempQuery = Self.filterQuery(filter: [name: decoded], query: tempQuery)
+                                 tempQuery.group(.or) { or in
+                                     for uuid in decoded {
+                                         or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, uuid)
+                                     }
+                                 }
+                         }
                      }else if entityProperty.fieldType == .date || entityProperty.fieldType == .dateTime {
                          let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
                          print("[JORO] \(valueReplaced)")
