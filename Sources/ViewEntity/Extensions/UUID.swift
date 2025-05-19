@@ -5,6 +5,7 @@
 //  Created by Georgie Ivanov on 20.10.24.
 //
 import Foundation
+import TypesLib
 
 public extension UUID {
     func hexEncodedString(uppercase: Bool = false) -> String {

@@ -11,6 +11,7 @@ import FluentKit
 import FluentSQL
 import MySQLKit
 import SwiftMoment
+import TypesLib
 
 public protocol EntityModelProtocol: EntityProtocol, Equatable, Content, FluentKit.Fields, Model {
     /// ID container to hold and pass entity ID. Optional for non yet existing entity
