@@ -116,8 +116,8 @@ public extension EntityModelProtocol {
                 print("[JORO] name: \(name), type: \(type(of: name))")
                 let value = filterValue[index]
                 print("[JORO] type of value: \(type(of: value))")
-                let decodedName = try JSONDecoder().decode([String].self, from: name.data(using: .utf8)!)
-                print("[JORO 0: \(decodedName)]")
+//                let decodedName = try JSONDecoder().decode([String].self, from: name.data(using: .utf8)!)
+//                print("[JORO 0: \(decodedName)]")
                 let fieldNameList = name.components(separatedBy: ".")
                 let fieldName = fieldNameList.first!
                 print("[JORO] Filter name: \(name), Filter value: \(value), Field name: \(fieldName)")
