@@ -105,83 +105,162 @@ public extension EntityModelProtocol {
     }
     
     /// Returns query builder with applied filter
-     static func getFilterQuery(db: Database, filter: FilterParam) throws -> QueryBuilder<Self> {
-         var tempQuery = self.allQuery(query: Self.query(on: db))
-         if let filterName = filter.name,
-            let filterValue = filter.value,
-            filterName.count == filterValue.count {
-             for (index, name) in filterName.enumerated(){
-                 print("[JORO] name: \(name), type: \(type(of: name))")
-                 let value = filterValue[index]
-                 print("[JORO] type of value: \(type(of: value))")
-                 let decodedName = try JSONDecoder().decode([String].self, from: name.data(using: .utf8)!)
-                 print("[JORO 0: \(decodedName)]")
-                 let fieldNameList = name.components(separatedBy: ".")
-                 let fieldName = fieldNameList.first!
-                 print("[JORO] Filter name: \(name), Filter value: \(value), Field name: \(fieldName)")
-                 
-                 if let entityProperty = Self.entityConfiguration.fields.first(where: { property in property.name == fieldName}){
-                     if entityProperty.fieldType == .select || entityProperty.fieldType == .selectMultiple {
+    static func getFilterQuery(db: Database, filter: FilterParam) throws -> QueryBuilder<Self> {
+        var tempQuery = self.allQuery(query: Self.query(on: db))
+        if let filterNameString = filter.name,
+           let filterValueString = filter.value,
+           let filterName = try? JSONDecoder().decode([String].self, from: filterNameString.data(using: .utf8)!),
+           let filterValue = try? JSONDecoder().decode([String].self, from: filterValueString.data(using: .utf8)!),
+           filterName.count == filterValue.count {
+            for (index, name) in filterName.enumerated(){
+                print("[JORO] name: \(name), type: \(type(of: name))")
+                let value = filterValue[index]
+                print("[JORO] type of value: \(type(of: value))")
+                let decodedName = try JSONDecoder().decode([String].self, from: name.data(using: .utf8)!)
+                print("[JORO 0: \(decodedName)]")
+                let fieldNameList = name.components(separatedBy: ".")
+                let fieldName = fieldNameList.first!
+                print("[JORO] Filter name: \(name), Filter value: \(value), Field name: \(fieldName)")
+                
+                if let entityProperty = Self.entityConfiguration.fields.first(where: { property in property.name == fieldName}){
+                    if entityProperty.fieldType == .select || entityProperty.fieldType == .selectMultiple {
 //                         let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
-                         print("[JORO 1] \(value)")
-                         if entityProperty.dataType == .string {
-                             let decoded: [String] = try JSONDecoder().decode([String].self, from: value.data(using: .utf8)!)
-                             tempQuery.group(.or) { or in
-                                 for enumValue in decoded {
-                                     or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, enumValue)
-                                 }
-                             }
-                         }else{
-                             let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: value.data(using: .utf8)!)
-                             print("[JORO 11] \(decoded)")
-                             tempQuery = Self.filterQuery(filter: [name: decoded], query: tempQuery)
-                                 tempQuery.group(.or) { or in
-                                     for uuid in decoded {
-                                         print("[JORO 111] \(uuid)")
-                                         or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, uuid)
-                                     }
-                                 }
-                         }
-                     }else if entityProperty.fieldType == .date || entityProperty.fieldType == .dateTime {
-                         let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
-                         print("[JORO] \(valueReplaced)")
-                         let decoded: [Int?] = try JSONDecoder().decode([Int?].self, from: valueReplaced.data(using: .utf8)!)
-                         if decoded.count == 2,
-                            let start = decoded[0],
-                            let end = decoded[1] {
-                             let startDate = moment(start).startOf(TimeUnit.Days).date
-                             let endDate = moment(end).endOf(TimeUnit.Days).date
-                             tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .greaterThanOrEqual, startDate)
-                             tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .lessThanOrEqual, endDate)
-                         }
-                         print(decoded)
-                     }else if entityProperty.fieldType == .nestedArray || entityProperty.fieldType == .nestedForm,
-                              let nestedFieldName = fieldNameList.count == 2 ? fieldNameList[1] : nil,
-                              let nestedRef = entityProperty.nestedRef,
-                              let nestedProperty: FieldProtocol = nestedRef.fields.first(where: { nestedProperty in nestedProperty.name == nestedFieldName}),
-                              let nestedSchema = nestedRef._schema,
-                              let parent = Self.parentFiledsKeys[entityProperty.name] {
-                         if nestedProperty.fieldType == .select || nestedProperty.fieldType == .selectMultiple {
-                             let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
-                             print("[JORO 2] \(valueReplaced)")
-                             let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: valueReplaced.data(using: .utf8)!)
-                             tempQuery.query.joins.append(.join(schema: nestedSchema, alias: nil, .inner, foreign: DatabaseQuery.Field.path([FieldKey(stringLiteral: parent)], schema: nestedSchema), local: DatabaseQuery.Field.path([FieldKey.id], schema: Self.schema)))
-                             tempQuery.group(.or) { or in
-                                 for uuid in decoded {
-                                   or.filter(DatabaseQuery.Field.path([FieldKey(stringLiteral: nestedProperty.keyField)], schema: nestedSchema), .equal, DatabaseQuery.Value.bind(uuid))
-                                 }
-                             }
-                         }
-                         
-                     }else{
-                         tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .contains(inverse: false, .anywhere), value)
-                     }
-                 }
-                 
-             }
-         }
-         return tempQuery
-     }
+                        print("[JORO 1] \(value)")
+                        if entityProperty.dataType == .string {
+                            let decoded: [String] = try JSONDecoder().decode([String].self, from: value.data(using: .utf8)!)
+                            tempQuery.group(.or) { or in
+                                for enumValue in decoded {
+                                    or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, enumValue)
+                                }
+                            }
+                        }else{
+                            let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: value.data(using: .utf8)!)
+                            print("[JORO 11] \(decoded)")
+                            tempQuery = Self.filterQuery(filter: [name: decoded], query: tempQuery)
+                                tempQuery.group(.or) { or in
+                                    for uuid in decoded {
+                                        print("[JORO 111] \(uuid)")
+                                        or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, uuid)
+                                    }
+                                }
+                        }
+                    }else if entityProperty.fieldType == .date || entityProperty.fieldType == .dateTime {
+                        let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
+                        print("[JORO] \(valueReplaced)")
+                        let decoded: [Int?] = try JSONDecoder().decode([Int?].self, from: valueReplaced.data(using: .utf8)!)
+                        if decoded.count == 2,
+                           let start = decoded[0],
+                           let end = decoded[1] {
+                            let startDate = moment(start).startOf(TimeUnit.Days).date
+                            let endDate = moment(end).endOf(TimeUnit.Days).date
+                            tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .greaterThanOrEqual, startDate)
+                            tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .lessThanOrEqual, endDate)
+                        }
+                        print(decoded)
+                    }else if entityProperty.fieldType == .nestedArray || entityProperty.fieldType == .nestedForm,
+                             let nestedFieldName = fieldNameList.count == 2 ? fieldNameList[1] : nil,
+                             let nestedRef = entityProperty.nestedRef,
+                             let nestedProperty: FieldProtocol = nestedRef.fields.first(where: { nestedProperty in nestedProperty.name == nestedFieldName}),
+                             let nestedSchema = nestedRef._schema,
+                             let parent = Self.parentFiledsKeys[entityProperty.name] {
+                        if nestedProperty.fieldType == .select || nestedProperty.fieldType == .selectMultiple {
+                            let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
+                            print("[JORO 2] \(valueReplaced)")
+                            let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: valueReplaced.data(using: .utf8)!)
+                            tempQuery.query.joins.append(.join(schema: nestedSchema, alias: nil, .inner, foreign: DatabaseQuery.Field.path([FieldKey(stringLiteral: parent)], schema: nestedSchema), local: DatabaseQuery.Field.path([FieldKey.id], schema: Self.schema)))
+                            tempQuery.group(.or) { or in
+                                for uuid in decoded {
+                                  or.filter(DatabaseQuery.Field.path([FieldKey(stringLiteral: nestedProperty.keyField)], schema: nestedSchema), .equal, DatabaseQuery.Value.bind(uuid))
+                                }
+                            }
+                        }
+                        
+                    }else{
+                        tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .contains(inverse: false, .anywhere), value)
+                    }
+                }
+                
+            }
+        }
+        return tempQuery
+    }
+//     static func getFilterQuery(db: Database, filter: FilterParam) throws -> QueryBuilder<Self> {
+//         var tempQuery = self.allQuery(query: Self.query(on: db))
+//         if let filterName = filter.name,
+//            let filterValue = filter.value,
+//            filterName.count == filterValue.count {
+//             for (index, name) in filterName.enumerated(){
+//                 print("[JORO] name: \(name), type: \(type(of: name))")
+//                 let value = filterValue[index]
+//                 print("[JORO] type of value: \(type(of: value))")
+//                 let decodedName = try JSONDecoder().decode([String].self, from: name.data(using: .utf8)!)
+//                 print("[JORO 0: \(decodedName)]")
+//                 let fieldNameList = name.components(separatedBy: ".")
+//                 let fieldName = fieldNameList.first!
+//                 print("[JORO] Filter name: \(name), Filter value: \(value), Field name: \(fieldName)")
+//                 
+//                 if let entityProperty = Self.entityConfiguration.fields.first(where: { property in property.name == fieldName}){
+//                     if entityProperty.fieldType == .select || entityProperty.fieldType == .selectMultiple {
+////                         let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
+//                         print("[JORO 1] \(value)")
+//                         if entityProperty.dataType == .string {
+//                             let decoded: [String] = try JSONDecoder().decode([String].self, from: value.data(using: .utf8)!)
+//                             tempQuery.group(.or) { or in
+//                                 for enumValue in decoded {
+//                                     or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, enumValue)
+//                                 }
+//                             }
+//                         }else{
+//                             let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: value.data(using: .utf8)!)
+//                             print("[JORO 11] \(decoded)")
+//                             tempQuery = Self.filterQuery(filter: [name: decoded], query: tempQuery)
+//                                 tempQuery.group(.or) { or in
+//                                     for uuid in decoded {
+//                                         print("[JORO 111] \(uuid)")
+//                                         or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, uuid)
+//                                     }
+//                                 }
+//                         }
+//                     }else if entityProperty.fieldType == .date || entityProperty.fieldType == .dateTime {
+//                         let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
+//                         print("[JORO] \(valueReplaced)")
+//                         let decoded: [Int?] = try JSONDecoder().decode([Int?].self, from: valueReplaced.data(using: .utf8)!)
+//                         if decoded.count == 2,
+//                            let start = decoded[0],
+//                            let end = decoded[1] {
+//                             let startDate = moment(start).startOf(TimeUnit.Days).date
+//                             let endDate = moment(end).endOf(TimeUnit.Days).date
+//                             tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .greaterThanOrEqual, startDate)
+//                             tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .lessThanOrEqual, endDate)
+//                         }
+//                         print(decoded)
+//                     }else if entityProperty.fieldType == .nestedArray || entityProperty.fieldType == .nestedForm,
+//                              let nestedFieldName = fieldNameList.count == 2 ? fieldNameList[1] : nil,
+//                              let nestedRef = entityProperty.nestedRef,
+//                              let nestedProperty: FieldProtocol = nestedRef.fields.first(where: { nestedProperty in nestedProperty.name == nestedFieldName}),
+//                              let nestedSchema = nestedRef._schema,
+//                              let parent = Self.parentFiledsKeys[entityProperty.name] {
+//                         if nestedProperty.fieldType == .select || nestedProperty.fieldType == .selectMultiple {
+//                             let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
+//                             print("[JORO 2] \(valueReplaced)")
+//                             let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: valueReplaced.data(using: .utf8)!)
+//                             tempQuery.query.joins.append(.join(schema: nestedSchema, alias: nil, .inner, foreign: DatabaseQuery.Field.path([FieldKey(stringLiteral: parent)], schema: nestedSchema), local: DatabaseQuery.Field.path([FieldKey.id], schema: Self.schema)))
+//                             tempQuery.group(.or) { or in
+//                                 for uuid in decoded {
+//                                   or.filter(DatabaseQuery.Field.path([FieldKey(stringLiteral: nestedProperty.keyField)], schema: nestedSchema), .equal, DatabaseQuery.Value.bind(uuid))
+//                                 }
+//                             }
+//                         }
+//                         
+//                     }else{
+//                         tempQuery.filter(FieldKey(stringLiteral: entityProperty.keyField), .contains(inverse: false, .anywhere), value)
+//                     }
+//                 }
+//                 
+//             }
+//         }
+//         return tempQuery
+//     }
     
     static func getBackRefOptions(uuid: UUID, request: Request) async throws -> [BackRefOptions] {
         var result: [BackRefOptions] = []
