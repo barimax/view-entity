@@ -124,8 +124,8 @@ public extension EntityModelProtocol {
                 
                 if let entityProperty = Self.entityConfiguration.fields.first(where: { property in property.name == fieldName}){
                     if entityProperty.fieldType == .select || entityProperty.fieldType == .selectMultiple {
-                         let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
-                        print("[JORO 1] \(value)")
+                         let valueReplaced = "[\"" + value.replacingOccurrences(of: ";", with: "\",\"") + "\"]"
+                        print("[JORO 1] \(valueReplaced)")
                         if entityProperty.dataType == .string {
                             let decoded: [String] = try JSONDecoder().decode([String].self, from: valueReplaced.data(using: .utf8)!)
                             tempQuery.group(.or) { or in
