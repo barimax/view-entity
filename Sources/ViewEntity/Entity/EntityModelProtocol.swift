@@ -118,17 +118,17 @@ public extension EntityModelProtocol {
                  
                  if let entityProperty = Self.entityConfiguration.fields.first(where: { property in property.name == fieldName}){
                      if entityProperty.fieldType == .select || entityProperty.fieldType == .selectMultiple {
-                         let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
-                         print("[JORO 1] \(valueReplaced)")
+//                         let valueReplaced = "[" + value.replacingOccurrences(of: ";", with: ",") + "]"
+//                         print("[JORO 1] \(valueReplaced)")
                          if entityProperty.dataType == .string {
-                             let decoded: [String] = try JSONDecoder().decode([String].self, from: valueReplaced.data(using: .utf8)!)
+                             let decoded: [String] = try JSONDecoder().decode([String].self, from: value.data(using: .utf8)!)
                              tempQuery.group(.or) { or in
                                  for enumValue in decoded {
                                      or.filter(FieldKey(stringLiteral: entityProperty.keyField), .equal, enumValue)
                                  }
                              }
                          }else{
-                             let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: valueReplaced.data(using: .utf8)!)
+                             let decoded: [UUID] = try JSONDecoder().decode([UUID].self, from: value.data(using: .utf8)!)
                              tempQuery = Self.filterQuery(filter: [name: decoded], query: tempQuery)
                                  tempQuery.group(.or) { or in
                                      for uuid in decoded {
