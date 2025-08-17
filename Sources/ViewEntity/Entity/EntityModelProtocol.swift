@@ -112,6 +112,8 @@ public extension EntityModelProtocol {
             filterName.count == filterValue.count {
              for (index, name) in filterName.enumerated(){
                  let value = filterValue[index]
+                 let decodedName = try JSONDecoder().decode([String].self, from: name.data(using: .utf8)!)
+                 print("[JORO 0: \(decodedName)]")
                  let fieldNameList = name.components(separatedBy: ".")
                  let fieldName = fieldNameList.first!
                  print("[JORO] Filter name: \(name), Filter value: \(value), Field name: \(fieldName)")
