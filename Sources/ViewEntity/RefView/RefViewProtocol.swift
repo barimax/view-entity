@@ -14,7 +14,7 @@ public protocol RefViewProtocol: Codable, Sendable {
     static func load(refOptions ro: [String:RefOptionField], refViews rw: [String: RefViewProtocol]) -> RefViewProtocol
 }
 private enum RefViewCodingKeys: String, CodingKey {
-    case fields, refOptions, refViews, isDocument
+    case fields, refOptions, refViews, isDocument, registerName
 }
 public extension RefViewProtocol {
     func encode(to encoder: Encoder) throws {
@@ -23,5 +23,6 @@ public extension RefViewProtocol {
         try container.encode(refOptions, forKey: .refOptions)
         try container.encode(refViews.mapValues { EncodableWrapper($0)}, forKey: .refViews)
         try container.encode(isDocument, forKey: .isDocument)
+        try container.encode(registerName, forKey: .registerName)
     }
 }
