@@ -10,6 +10,7 @@ import Fluent
 public protocol RefViewEntityModelProtocol: RefViewEntityProtocol {
     associatedtype F: RefViewEntityProtocol
     static var isDocument: Bool { get }
+    static var registerName: String { get }
 }
 public extension RefViewEntityModelProtocol {
     static var isDocument: Bool { false }

@@ -6,6 +6,7 @@
 //
 
 public protocol RefViewProtocol: Codable, Sendable {
+    var registerName: String { get }
     var fields: [FieldProtocol] { get set }
     var refOptions: [String:RefOptionField] { get set }
     var refViews: [String: RefViewProtocol] { get set }

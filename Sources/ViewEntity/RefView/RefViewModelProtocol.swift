@@ -10,6 +10,7 @@ public protocol RefViewModelProtocol: RefViewProtocol {
 }
 
 public extension RefViewModelProtocol {
+    var registerName: String { F.registerName }
     var isDocument: Bool { F.isDocument }
     var fields: [FieldProtocol] {
         get { F.fields }
