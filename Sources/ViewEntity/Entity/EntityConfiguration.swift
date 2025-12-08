@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct EntityConfiguration {
+public struct EntityConfiguration: Sendable {
     public var singleName: String
     public var pluralName: String
     public var fields: [FieldProtocol]
