@@ -23,7 +23,7 @@ enum FieldCodingKeys: String, CodingKey {
     case fieldType, dataType, width, name, required, label, order, disabled, agregate
 }
 
-public protocol FieldProtocol: Encodable {
+public protocol FieldProtocol: Encodable, Sendable {
     var keyField: String { get }
     var name: String { get }
     var fieldType: FieldType { get set }

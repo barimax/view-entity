@@ -9,5 +9,5 @@ import Foundation
 
 public protocol MenuProtocol {
     static var registerName: String { get }
-    static var entityConfiguration: EntityConfiguration { get set }
+    static var entityConfiguration: EntityConfiguration { get }
 }

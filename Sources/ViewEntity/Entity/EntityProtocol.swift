@@ -14,7 +14,7 @@ public protocol EntityCodable: Codable, Sendable {}
 public protocol EntityProtocol: EntityCodable, MenuProtocol {
     
     static var registerName: String { get }
-    static var entityConfiguration: EntityConfiguration { get set }
+    static var entityConfiguration: EntityConfiguration { get }
     
     // Auto completed static prpoerties in extensions
     static var fromFile: Bool { get }

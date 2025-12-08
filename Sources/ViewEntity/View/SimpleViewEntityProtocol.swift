@@ -20,9 +20,9 @@ public extension SimpleViewEntityProtocol {
             }
             return fields
         }
-        set(newValue){
-            T.entityConfiguration.fields = newValue
-        }
+//        set(newValue){
+//            T.entityConfiguration.fields = newValue
+//        }
     }
     var fromFile: Bool { T.fromFile }
     var isDateOptimized: Bool { T.isDateOptimized }

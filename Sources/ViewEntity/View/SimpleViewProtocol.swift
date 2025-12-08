@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol SimpleViewProtocol: Encodable, Sendable {
-    var fields: [FieldProtocol] { set get }
+    var fields: [FieldProtocol] { get }
     var registerName: String { get }
     var singleName: String { get }
     var pluralName: String { get }
