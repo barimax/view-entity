@@ -9,7 +9,7 @@ import Foundation
 import Vapor
 import FluentKit
 
-public protocol EntityCodable: Codable {}
+public protocol EntityCodable: Codable, Sendable {}
 
 public protocol EntityProtocol: EntityCodable, MenuProtocol {
     

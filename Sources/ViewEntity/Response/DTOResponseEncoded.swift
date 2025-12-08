@@ -11,7 +11,7 @@ public struct DTOResponseEncoded: AsyncResponseEncodable, Encodable {
     public func encodeResponse(for request: Request) async throws -> Response {
         do {
             
-            let data = try request.appConfiguration.encoder.encode(self)
+            let data = try await request.appConfiguration.encoder.encode(self)
             return Response.init(status: .ok, headers: HTTPHeaders([("content-type","application/json")]), body: Response.Body.init(data: data))
         }catch{
             throw MyError.unconvirtible

@@ -1,4 +1,5 @@
 {
+  "originHash" : "f66159b36904074ee3ee4e334c3241910f716016b52c70c05b2fa01f00d42621",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -52,6 +53,24 @@
       "state" : {
         "revision" : "52b7d863b884cbecfe61dd4eae2e7277992f0a35",
         "version" : "4.7.1"
+      }
+    },
+    {
+      "identity" : "jwt",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/jwt.git",
+      "state" : {
+        "revision" : "af1c59762d70d1065ddbc0d7902ea9b3dacd1a26",
+        "version" : "5.1.2"
+      }
+    },
+    {
+      "identity" : "jwt-kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vapor/jwt-kit.git",
+      "state" : {
+        "revision" : "2033b3e661238dda3d30e36a2d40987499d987de",
+        "version" : "5.2.0"
       }
     },
     {
@@ -302,8 +321,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/barimax/types-lib.git",
       "state" : {
-        "revision" : "74dbb8a5ab8706b0fffb94010c6c8ba101625b2d",
-        "version" : "0.4.2"
+        "revision" : "550edf37f8d29725db4b3a6b64a5d28b8efab7fe",
+        "version" : "0.7.1"
       }
     },
     {
@@ -325,5 +344,5 @@
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
