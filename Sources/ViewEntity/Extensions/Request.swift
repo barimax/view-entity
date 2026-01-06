@@ -69,20 +69,10 @@ public extension Request {
         self.storage[ViewKey.self] = newValue
     }
     
-   
-    
-    var databaseID: DatabaseID? {
-            get {
-                self.storage[DBConfigurationKey.self]
-            }
-            set {
-                self.storage[DBConfigurationKey.self] = newValue
-            }
-        }
-    func companyDatabase() throws -> Database  {
-        guard let databaseID = self.databaseID else {
+    func requireCompanyDatabase() throws -> Database  {
+        guard let databaseID = self.authServer.companyDatabaseID else {
             throw Abort(.badRequest)
         }
-        return self.db(databaseID)
+        return self.db(DatabaseID(string: databaseID))
     }
 }
