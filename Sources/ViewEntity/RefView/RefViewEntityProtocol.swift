@@ -8,7 +8,7 @@
 import Vapor
 import Fluent
 
-public protocol RefViewEntityProtocol: Codable {
+public protocol RefViewEntityProtocol: Codable, Sendable {
     static var fields: [FieldProtocol] { get set }
     static var _schema: String? { get }
     static func refView(refOptions ro: [String:RefOptionField], refViews rw: [String: RefViewProtocol]) -> RefViewProtocol

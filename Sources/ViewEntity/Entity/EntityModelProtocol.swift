@@ -269,7 +269,7 @@ public extension EntityModelProtocol {
         }
         for backRef in view.backRefs {
             if let optionable = backRef.entity as? OptionableEntityProtocol.Type {
-                let options = try await optionable.backRefsOptions(fieldName: backRef.formField, id: uuid, database: request.companyDatabase())
+                let options = try await optionable.backRefsOptions(fieldName: backRef.formField, id: uuid, database: request.requireCompanyDatabase())
                 if !options.isEmpty {
                     result.append(BackRefOptions(backRef: backRef, options: options))
                 }
@@ -283,7 +283,7 @@ public extension EntityModelProtocol {
         let sortBy: String? = request.query["sortBy"]
         let sortDirection = Self.getSortDirection(request: request)
         let filter = try request.query.get(FilterParam.self, at: "filter")
-        let tempQuery = try Self.getFilterQuery(db: request.companyDatabase(), filter: filter)
+        let tempQuery = try Self.getFilterQuery(db: request.requireCompanyDatabase(), filter: filter)
         let getAllQuery = try self.allQuery(query: Self.getSortQuery(query: tempQuery, sortBy: sortBy, sortDirection: sortDirection))
        
         let result = try await getAllQuery.all()
@@ -296,9 +296,9 @@ public extension EntityModelProtocol {
             let entity = try await self.decodeRequest(request: request)
             if let entityId = entity.id,
                let id = entityId as? Self.IDValue,
-               let oldEntity = try await Self.find(id, on: request.companyDatabase()) {
+               let oldEntity = try await Self.find(id, on: request.requireCompanyDatabase()) {
                 entity._$id.exists = true
-                let codableEntity = try await request.companyDatabase().transaction { database -> EntityCodable in
+                let codableEntity = try await request.requireCompanyDatabase().transaction { database -> EntityCodable in
                     return try await Self.updateTransaction(oldEntity: oldEntity, newEntity: entity, database: database, request: request)
                 }
                 let view = try View<Self>(request: request)
@@ -306,7 +306,7 @@ public extension EntityModelProtocol {
             }else{
                 
              
-                let codableEntity = try await request.companyDatabase().transaction { database -> EntityCodable in
+                let codableEntity = try await request.requireCompanyDatabase().transaction { database -> EntityCodable in
                     return try await Self.createTransaction(createdEntity: entity, database: database, request: request)
                 }
                 let view: ViewProtocol = try request.isViewLoaded ? request.entityView : View<Self>(request: request)
@@ -322,7 +322,7 @@ public extension EntityModelProtocol {
         let backRefOptions = try await Self.getBackRefOptions(uuid: id, request: request)
         if backRefOptions.isEmpty {
             do {
-                try await Self.query(on: request.companyDatabase()).filter(FieldKey.id, .equal, id).delete(force: force)
+                try await Self.query(on: request.requireCompanyDatabase()).filter(FieldKey.id, .equal, id).delete(force: force)
             }catch{
                 debugPrint(error)
                 throw Abort(.custom(code: 591, reasonPhrase: error.localizedDescription), reason: "Записът не може да бъде изтрит.")
@@ -344,7 +344,7 @@ public extension EntityModelProtocol {
     static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> ViewProtocol? {
         var view = try await View<Self>.load(req: r, views: v, full: f)
         print("[JORO] View loaded. Start count")
-        view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
+        view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))
         print("[JORO] Rows count \(view.rowsCount)")
         return view
     }
@@ -367,7 +367,7 @@ public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
     static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> ViewProtocol? {
         var view = try await View<Self>.load(req: r, views: v, full: f)
         print("[JORO] DateOptimizedGetAllProtocol View loaded. Start count")
-        view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
+        view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))
         print("[JORO] Rows count \(view.rowsCount)")
         return view
     }
@@ -386,7 +386,7 @@ public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
         let sortDirection = Self.getSortDirection(request: request)
         let sortBy: String? = request.query["sortBy"]
         let filter = try request.query.get(FilterParam.self, at: "filter")
-        let tempQuery = try Self.getFilterQuery(db: request.companyDatabase(), filter: filter)
+        let tempQuery = try Self.getFilterQuery(db: request.requireCompanyDatabase(), filter: filter)
         let getAllQuery = sortBy == nil ? tempQuery.sort(Self.optimizedByKeyPath, sortDirection) : try Self.getSortQuery(query: tempQuery, sortBy: sortBy, sortDirection: sortDirection)
         if let offset: Int = request.query["offset"],
            let limit: Int = request.query["limit"] {
@@ -402,7 +402,7 @@ public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
 public extension EntityModelProtocol where Self: LoadAllViewProtocol {
     static func view(_ r: Request, _ v: [String] = []) async throws -> ViewProtocol? {
         var view = try await View<Self>.load(req: r, views: v, full: true)
-        view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
+        view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))
         return view
     }
 }
@@ -410,7 +410,7 @@ public extension EntityModelProtocol where Self: LoadAllViewProtocol {
 public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol, Self: LoadAllViewProtocol {
     static func view(_ r: Request, _ v: [String] = []) async throws -> ViewProtocol? {
         var view = try await View<Self>.load(req: r, views: v, full: true)
-        view.rowsCount = try await Self.count(query: query(on: r.companyDatabase()))
+        view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))
         return view
     }
 }

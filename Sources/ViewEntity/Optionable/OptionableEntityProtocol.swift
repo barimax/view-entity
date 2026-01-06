@@ -51,7 +51,7 @@ public extension OptionableEntityProtocol where Self: EntityModelProtocol  {
 
 public extension OptionableEntityProtocol where Self: SelfSiblingProtocol {
     static func backRefsOptions(fieldName: String, id: UUID, database db: Database) async throws -> [SelectOption] {
-        guard let field = Self.entityConfiguration.fields.first(where: { field in field.name == fieldName}) else {
+        guard let _ = Self.entityConfiguration.fields.first(where: { field in field.name == fieldName}) else {
             throw Abort(.badRequest, reason: "Грешка в името на полето.")
         }
         guard let result = try await Self.query(on: db).filter(FieldKey.id, .equal, id).first() else {

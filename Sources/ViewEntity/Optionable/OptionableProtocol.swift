@@ -7,7 +7,7 @@
 
 import Fluent
 
-public protocol OptionableProtocol {
+public protocol OptionableProtocol: Sendable {
     static var schema: String { get }
     static var isButton: Bool { get }
     static func options(database db: Database) async throws -> [SelectOption]

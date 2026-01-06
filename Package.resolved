@@ -1,5 +1,5 @@
 {
-  "originHash" : "2870d0ac0d22c31b2a3c61567d29e07f6b243a9e4e70ed951ff92b5db3a794bb",
+  "originHash" : "7a410b478815804f766bafff8a728bec046ee9b7de3518ba7615c4a67a6e7712",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -339,8 +339,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/barimax/types-lib.git",
       "state" : {
-        "revision" : "d19f5433884a5f0dee5bd8fb4ec7ec2649d0db56",
-        "version" : "0.8.6"
+        "revision" : "8bb823d7bc91961dadb9ea50acbbbe1d724a6d43",
+        "version" : "0.8.7"
       }
     },
     {

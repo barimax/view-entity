@@ -22,7 +22,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/fluent-mysql-driver.git", from: "4.0.0"),
         .package(url: "https://github.com/iamjono/SwiftMoment.git", "1.2.0"..<"2.0.0"),
-        .package(url: "https://github.com/barimax/types-lib.git", from: "0.8.6"),
+        .package(url: "https://github.com/barimax/types-lib.git", from: "0.8.7"),
         
     ],
     targets: [
