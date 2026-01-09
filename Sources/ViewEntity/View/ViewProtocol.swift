@@ -21,7 +21,6 @@ public protocol ViewProtocol: SimpleViewProtocol {
     var dateOptimizedPropertyName: String? { get }
     var rowsCount: Int { get set }
     func responseEncoded() -> ResponseEncoded
-    static func load(req: Request, views: [String], full isFullLoad: Bool) async throws -> ViewProtocol
     var request: Request { get }
     var database: Database { get }
     

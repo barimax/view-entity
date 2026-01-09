@@ -41,7 +41,7 @@ public extension ViewEntityProtocol {
         return nestedRef.refView(refOptions: refViewRefOptions, refViews: refViewRefViews)
     }
     
-    static func load(req: Request, views: [String] = [], full isFullLoad: Bool = false) async throws -> ViewProtocol {
+    static func load(req: Request, views: [String] = [], full isFullLoad: Bool = false) async throws -> View<T> {
         print("[JORO] loadedViewsRegisterNames: \(views)")
         var view = try View<T>(request: req, loadedViewsRegisterNames: views)
         print("View generic T is", String(describing: T.self))

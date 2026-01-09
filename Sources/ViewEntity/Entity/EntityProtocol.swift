@@ -42,7 +42,7 @@ public protocol EntityProtocol: EntityCodable, MenuProtocol {
     static func save(request: Request) async throws -> ResponseEncoded
     static func get(request: Request) async throws -> GetResponseEncoded
     static func delete(request: Request, id: UUID, force: Bool) async throws -> DeleteResponseEncoded
-    static func recalculate(request: Request, view: ViewProtocol?, triggerFieldName: String?) async throws -> (Encodable, ViewProtocol?)
+    static func recalculate(request: Request) async throws -> (Encodable, ViewProtocol?)
     
     init()
 }

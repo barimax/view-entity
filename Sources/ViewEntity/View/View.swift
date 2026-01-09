@@ -10,6 +10,9 @@ import Fluent
 
 public struct View<T: EntityModelProtocol>: ViewEntityProtocol {
     
+    
+    
+    
 
     
     public var rowsCount: Int = 0

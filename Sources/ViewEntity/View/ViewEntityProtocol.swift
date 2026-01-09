@@ -14,6 +14,7 @@ public protocol ViewEntityProtocol: ViewProtocol, SimpleViewEntityProtocol {
     func responseEncoder(from: [EntityCodable]) -> ResponseEncoded
     func responseEncoder(from: [EntityCodable], lastLimit: Int) -> ResponseEncoded
     func responseEncoder(from: EntityCodable) -> ResponseEncoded
+    static func load(req: Request, views: [String], full isFullLoad: Bool) async throws -> View<T>
     static func currentOptions(customOptions: [String : [SelectOption]]?,field: FieldProtocol, view: inout View<T>, database: Database) async throws -> [SelectOption]
 }
 

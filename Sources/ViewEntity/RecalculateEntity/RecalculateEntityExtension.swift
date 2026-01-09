@@ -16,7 +16,7 @@ public extension EntityModelProtocol where Self == Self.DTO.M, Self: Recalculate
     static func createTransaction(createdEntity: Self, database: Database, request: Request, view: inout ViewProtocol?) async throws -> EntityCodable {
         try await Self.create(newEntity: createdEntity, database: database, request: request)
         let dto = try DTO.fromModel(entity: createdEntity)
-        let (recalculated, _) = try await Self.recalculate(request: request, view: view, triggerFieldName: nil, dto: dto)
+        let (recalculated, _) = try await Self.recalculate(request: request, dto: dto)
         return recalculated as EntityCodable
 
     }
@@ -33,7 +33,7 @@ public extension EntityModelProtocol where Self: RecalculateTriggersProtocol {
 /// Calls entity recalculate method without DTO ( dto: nil)
 public extension EntityModelProtocol where Self: RecalculateProtocol {
     static func recalculate(request: Request, view: ViewProtocol?, triggerFieldName: String?) async throws -> (Encodable, ViewProtocol?) {
-        let recalculated = try await Self.recalculate(request: request, view: view, triggerFieldName: triggerFieldName, dto: nil)
+        let recalculated = try await Self.recalculate(request: request, dto: nil)
         return recalculated as (Encodable, ViewProtocol?)
     }
 }

@@ -13,5 +13,5 @@ public protocol RecalculateTriggersProtocol {
 }
 
 public protocol RecalculateProtocol: RecalculateTriggersProtocol, DTOProtocol {
-    static func recalculate(request: Request, view: ViewProtocol?, triggerFieldName: String?, dto: DTO?) async throws -> (DTO, ViewProtocol?)
+    static func recalculate(request: Request, dto: DTO?) async throws -> (DTO, ViewProtocol?)
 }

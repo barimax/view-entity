@@ -73,7 +73,7 @@ public extension EntityModelProtocol {
     }
     
     /// Default implementation of update query that throws error when try to call on non recalculatable entity
-    static func recalculate(request: Request, view: ViewProtocol?, triggerFieldName: String?) async throws -> (Encodable, ViewProtocol?) {
+    static func recalculate(request: Request) async throws -> (Encodable, ViewProtocol?) {
         throw Abort(.badRequest, reason: "Not recalculatable.")
     }
     
@@ -341,7 +341,7 @@ public extension EntityModelProtocol {
         lhs.id == rhs.id
     }
     
-    static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> ViewProtocol? {
+    static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> View<Self>? {
         var view = try await View<Self>.load(req: r, views: v, full: f)
         print("[JORO] View loaded. Start count")
         view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))

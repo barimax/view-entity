@@ -57,7 +57,7 @@ struct ViewEntityController: RouteCollection {
     
     func recalculateEntity(request: Request) async throws -> DTOResponseEncoded {
         try await request.loadAll()
-        let (entity, view) = try await request.entityType.recalculate(request: request, view: request.entityView, triggerFieldName: request.query["triggerFieldName"])
+        let (entity, view) = try await request.entityType.recalculate(request: request)
         return DTOResponseEncoded(view: view, entity: entity)
     }
     
