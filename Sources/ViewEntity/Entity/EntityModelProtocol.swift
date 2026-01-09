@@ -13,7 +13,7 @@ import MySQLKit
 import SwiftMoment
 import TypesLib
 
-public protocol EntityModelProtocol: EntityCodable, Equatable, Content, FluentKit.Fields, Model {
+public protocol EntityModelProtocol: EntityCodable, MenuProtocol, Equatable, Content, FluentKit.Fields, Model {
     static var registerName: String { get }
     static var entityConfiguration: EntityConfiguration { get }
     
