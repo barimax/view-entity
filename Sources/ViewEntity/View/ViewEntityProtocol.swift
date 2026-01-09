@@ -60,7 +60,7 @@ public extension ViewEntityProtocol {
     }
     
     var searchableDBFields: [String] { T.entityConfiguration.searchableDBFields }
-    var recalculateTriggerFields: [String] { [] }
+    var recalculateTriggerFields: [String] { T.recalculateTriggerFields }
     
     var query: QueryBuilder<T> { T.query(on: self.database) }
     
@@ -100,6 +100,4 @@ public extension ViewEntityProtocol {
     
 }
 
-public extension ViewEntityProtocol where T: RecalculateTriggersProtocol {
-    var recalculateTriggerFields: [String] { T.recalculateTriggerFields }
-}
+
