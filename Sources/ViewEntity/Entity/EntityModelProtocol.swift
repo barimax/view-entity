@@ -341,7 +341,7 @@ public extension EntityModelProtocol {
         lhs.id == rhs.id
     }
     
-    static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> View<Self>? {
+    static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> (any ViewEntityProtocol)? {
         var view = try await View<Self>.load(req: r, views: v, full: f)
         print("[JORO] View loaded. Start count")
         view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))
@@ -364,7 +364,7 @@ public extension EntityModelProtocol {
 
 public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
 
-    static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> ViewProtocol? {
+    static func loadView(_ r: Request, _ v: [String], full f: Bool = false) async throws -> (any ViewEntityProtocol)? {
         var view = try await View<Self>.load(req: r, views: v, full: f)
         print("[JORO] DateOptimizedGetAllProtocol View loaded. Start count")
         view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))

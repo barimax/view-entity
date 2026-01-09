@@ -33,7 +33,7 @@ public protocol EntityProtocol: EntityCodable, MenuProtocol {
     // End of requiered properties for model fields
     
 
-    static func loadView(_ r: Request, _ v: [String], full f: Bool) async throws -> ViewProtocol?
+    static func loadView(_ r: Request, _ v: [String], full f: Bool) async throws -> (any ViewEntityProtocol)?
     /// Returns entity view by initializing view from request
     static func pureView(_ r: Request) throws -> ViewProtocol
     
