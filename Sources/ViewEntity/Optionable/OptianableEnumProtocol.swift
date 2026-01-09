@@ -18,7 +18,7 @@ public extension OptionableEnumProtocol {
         return false
     }
     static var schema: String { "" }
-    static func view(_ v: [String]) async throws -> SimpleViewProtocol? { nil }
+    static func view(_ v: [String]) async throws -> (any SimpleViewEntityProtocol)? { nil }
 }
 
 public extension OptionableEnumProtocol where Self: RawRepresentable, Self.RawValue == String {

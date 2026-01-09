@@ -21,7 +21,7 @@ public extension EntityModelProtocol where Self: DTOProtocol, Self == Self.DTO.M
         let dto = try request.content.decode(DTO.self)
         return try await dto.toModel(request: request)
     }
-    static func createTransaction(createdEntity: Self, database: Database, request: Request, view: inout ViewProtocol?) async throws -> EntityCodable {
+    static func createTransaction(createdEntity: Self, database: Database, request: Request, view: inout (any ViewEntityProtocol)?) async throws -> EntityCodable {
         try await Self.create(newEntity: createdEntity, database: database, request: request)
         return try DTO.fromModel(entity: createdEntity)
     }

@@ -20,6 +20,6 @@ public final class SelfReference<T: EntityModelProtocol>: OptionableEntityProtoc
     }
     public static var registerName: String { T.registerName }
     public static var schema: String { T.schema }
-    public static func view(_ v: [String]) async throws -> SimpleViewProtocol? { nil }
+    public static func view(_ v: [String]) async throws -> (any SimpleViewEntityProtocol)? { nil }
     public static func customOptions(request: Request) async throws -> [String:[SelectOption]]? { nil }
 }

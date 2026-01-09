@@ -13,7 +13,7 @@ import Fluent
 /// Returns DTO object from entity after create and update transactions used in save static method
 public extension EntityModelProtocol where Self == Self.DTO.M, Self: RecalculateProtocol {
     
-    static func createTransaction(createdEntity: Self, database: Database, request: Request, view: inout ViewProtocol?) async throws -> EntityCodable {
+    static func createTransaction(createdEntity: Self, database: Database, request: Request, view: inout (any ViewEntityProtocol)?) async throws -> EntityCodable {
         try await Self.create(newEntity: createdEntity, database: database, request: request)
         let dto = try DTO.fromModel(entity: createdEntity)
         let (recalculated, _) = try await Self.recalculate(request: request, dto: dto)
@@ -32,8 +32,8 @@ public extension EntityModelProtocol where Self: RecalculateTriggersProtocol {
 /// If entity conforms to RecalculateProtocol but theres no DTO
 /// Calls entity recalculate method without DTO ( dto: nil)
 public extension EntityModelProtocol where Self: RecalculateProtocol {
-    static func recalculate(request: Request, view: ViewProtocol?, triggerFieldName: String?) async throws -> (Encodable, ViewProtocol?) {
+    static func recalculate(request: Request, view: (any ViewEntityProtocol)?, triggerFieldName: String?) async throws -> (Encodable, (any ViewEntityProtocol)?) {
         let recalculated = try await Self.recalculate(request: request, dto: nil)
-        return recalculated as (Encodable, ViewProtocol?)
+        return recalculated as (Encodable, (any ViewEntityProtocol)?)
     }
 }

@@ -10,7 +10,7 @@ import Fluent
 
 public extension ViewEntityProtocol {
     
-    static func getRefOptionView(field: FieldProtocol, view: inout View<T>, isFullLoad: Bool) async throws -> SimpleViewProtocol? {
+    static func getRefOptionView(field: FieldProtocol, view: inout View<T>, isFullLoad: Bool) async throws -> (any SimpleViewEntityProtocol)? {
         if !view.loadedViewsRegisterNames.contains(field.ref!.registerName) || isFullLoad {
            return try await field.ref!.view((view.loadedViewsRegisterNames + [field.ref!.registerName]))
         }

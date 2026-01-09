@@ -12,5 +12,5 @@ public protocol OptionableProtocol: Sendable {
     static var isButton: Bool { get }
     static func options(database db: Database) async throws -> [SelectOption]
     static var registerName: String { get }
-    static func view(_ v: [String]) async throws -> SimpleViewProtocol?
+    static func view(_ v: [String]) async throws -> (any SimpleViewEntityProtocol)?
 }

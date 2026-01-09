@@ -16,7 +16,7 @@ public protocol OptionableEntityProtocol: OptionableProtocol  {
 //    var id: UUID? { get set }
 }
 public extension OptionableEntityProtocol where Self: EntityModelProtocol  {
-    static func view(_ v: [String]) async throws -> SimpleViewProtocol? {
+    static func view(_ v: [String]) async throws -> (any SimpleViewEntityProtocol)? {
         return SimpleView<Self>(loadedViewsRegisterNames: v)
     }
     static func options(database db: Database) async throws -> [SelectOption] {

@@ -21,28 +21,28 @@ public extension Application {
         
         
     }
-    func initModelsRegister(types: [EntityProtocol.Type]) {
+    func initModelsRegister(types: [any EntityModelProtocol.Type]) {
         var register = Register()
         register.add(types: types)
         self.storage[RegisterKey.self] = register
     }
 }
 public struct Register: Sendable {
-    private var store: [EntityProtocol.Type] = []
+    private var store: [any EntityModelProtocol.Type] = []
     
-    public var all: [EntityProtocol.Type] {
+    public var all: [any EntityModelProtocol.Type] {
         self.store
     }
     
-    public mutating func add(type: EntityProtocol.Type) {
+    public mutating func add(type: any EntityModelProtocol.Type) {
         self.store.append(type)
     }
     
-    public mutating func add(types: [EntityProtocol.Type]) {
+    public mutating func add(types: [any EntityModelProtocol.Type]) {
         self.store.append(contentsOf: types)
     }
     
-    public func get(key: String) -> EntityProtocol.Type? {
+    public func get(key: String) -> (any EntityModelProtocol.Type)? {
         self.store.first(where: { $0.registerName == key })
     }
 }

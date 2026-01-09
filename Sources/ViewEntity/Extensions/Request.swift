@@ -15,11 +15,11 @@ struct DBConfigurationKey: StorageKey {
 }
 
 struct ViewKey: StorageKey {
-    typealias Value = ViewProtocol
+    typealias Value = any ViewEntityProtocol
 }
 
 struct EntityTypeKey: StorageKey {
-    typealias Value = EntityProtocol.Type
+    typealias Value = any EntityModelProtocol.Type
 }
 
 
@@ -28,7 +28,7 @@ public extension Request {
         self.application.appConfiguration
     }
     
-    var entityView: ViewProtocol {
+    var entityView: any ViewEntityProtocol {
         get throws {
             guard let view = self.storage[ViewKey.self] else {
                 throw Abort(.badRequest)
@@ -43,7 +43,7 @@ public extension Request {
         self.storage[ViewKey.self] != nil
     }
     
-    var entityType: EntityProtocol.Type {
+    var entityType: any EntityModelProtocol.Type {
         get throws {
             guard let entityType = self.storage[EntityTypeKey.self] else {
                 throw Abort(.badRequest)
@@ -65,7 +65,7 @@ public extension Request {
         self.storage[EntityTypeKey.self] = entityType
     }
     
-    func setView(newValue: ViewProtocol) {
+    func setView(newValue: any ViewEntityProtocol) {
         self.storage[ViewKey.self] = newValue
     }
     

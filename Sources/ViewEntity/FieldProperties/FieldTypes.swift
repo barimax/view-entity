@@ -14,8 +14,8 @@ public struct RefOptionField: Encodable, Sendable {
     public let registerName: String
     public var options: [SelectOption]
     public var isButton: Bool
-    let view: SimpleViewProtocol?
-    public init(registerName: String, options: [SelectOption], isButton: Bool, view: SimpleViewProtocol?) {
+    let view: (any SimpleViewEntityProtocol)?
+    public init(registerName: String, options: [SelectOption], isButton: Bool, view: (any SimpleViewEntityProtocol)?) {
         self.registerName = registerName
         self.options = options
         self.isButton = isButton
@@ -36,9 +36,9 @@ public struct BackRefs: Encodable, Sendable {
     public var pluralName: String = ""
     public var createNewByMultiple: Bool = false
     public var createNewByMultipleFields: [String] = []
-    let entity: EntityProtocol.Type
+    let entity: any EntityModelProtocol.Type
     
-    public init(entity e: EntityProtocol.Type) {
+    public init(entity e: any EntityModelProtocol.Type) {
         self.entity = e
     }
     // Codable keys

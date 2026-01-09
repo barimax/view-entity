@@ -10,7 +10,24 @@ import Fluent
 
 
 
-public protocol ViewEntityProtocol: ViewProtocol, SimpleViewEntityProtocol {
+public protocol ViewEntityProtocol: SimpleViewEntityProtocol {
+    var searchableDBFields: [String] { get }
+    var refOptions: [String:RefOptionField] { get set }
+    var backRefs: [BackRefs] { get set }
+    var refViews: [String: RefViewProtocol] { get set }
+    var recalculateTriggerFields: [String] { get }
+    var forceServerLoad: Bool { get set }
+    var fromFile: Bool { get }
+    var isDateOptimized: Bool { get }
+    var dateOptimizedPropertyName: String? { get }
+    var rowsCount: Int { get set }
+    func responseEncoded() -> ResponseEncoded
+    var request: Request { get }
+    var database: Database { get }
+    
+    func get(id: String?) async throws -> ResponseEncoded
+    init(request: Request, loadedViewsRegisterNames: [String], transactionDB: Database?) async throws
+    
     func responseEncoder(from: [EntityCodable]) -> ResponseEncoded
     func responseEncoder(from: [EntityCodable], lastLimit: Int) -> ResponseEncoded
     func responseEncoder(from: EntityCodable) -> ResponseEncoded
@@ -19,6 +36,28 @@ public protocol ViewEntityProtocol: ViewProtocol, SimpleViewEntityProtocol {
 }
 
 public extension ViewEntityProtocol {
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: ViewCodingKeys.self)
+        try container.encode(singleName, forKey: .singleName)
+        try container.encode(pluralName, forKey: .pluralName)
+        try container.encode(fields.map { EncodableWrapper($0) }, forKey: .fields)
+        try container.encode(registerName, forKey: .registerName)
+        try container.encode(refOptions, forKey: .refOptions)
+        try container.encode(backRefs, forKey: .backRefs)
+        try container.encode(titleFieldName, forKey: .titleFieldName)
+        try container.encode(recalculateTriggerFields, forKey: .recalculateTriggerFields)
+        try container.encode(forceServerLoad, forKey: .forceServerLoad)
+        try container.encode(fromFile, forKey: .fromFile)
+        try container.encode(isDateOptimized, forKey: .isDateOptimized)
+        try container.encode(dateOptimizedPropertyName, forKey: .dateOptimizedPropertyName)
+        try container.encode(rowsCount, forKey: .rowsCount)
+        try container.encode(isDocument, forKey: .isDocument)
+        let wrapped = self.refViews.map{ (k: String, v: RefViewProtocol) in
+            return (k,EncodableWrapper(v))
+        }
+        try container.encode(Dictionary(uniqueKeysWithValues: wrapped), forKey: .refViews)
+    }
     
     var searchableDBFields: [String] { T.entityConfiguration.searchableDBFields }
     var recalculateTriggerFields: [String] { [] }

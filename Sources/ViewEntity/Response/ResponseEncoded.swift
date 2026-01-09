@@ -17,7 +17,7 @@ public struct ResponseEncoded: AsyncResponseEncodable, Encodable {
         }
     }
     
-    let view: ViewProtocol
+    let view: any ViewEntityProtocol
     let entity: EntityCodable?
     let list: [EntityCodable]
     let lastLimit: Int
@@ -26,7 +26,7 @@ public struct ResponseEncoded: AsyncResponseEncodable, Encodable {
     }
     
     
-    public init(view v: ViewProtocol, entity e: EntityCodable?, list l: [EntityCodable] = [], lastLimit la: Int = 30){
+    public init(view v: any ViewEntityProtocol, entity e: EntityCodable?, list l: [EntityCodable] = [], lastLimit la: Int = 30){
         self.view = v
         self.entity = e
         self.list = l

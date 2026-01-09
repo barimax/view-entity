@@ -13,7 +13,39 @@ import MySQLKit
 import SwiftMoment
 import TypesLib
 
-public protocol EntityModelProtocol: EntityProtocol, Equatable, Content, FluentKit.Fields, Model {
+public protocol EntityModelProtocol: EntityCodable, Equatable, Content, FluentKit.Fields, Model {
+    static var registerName: String { get }
+    static var entityConfiguration: EntityConfiguration { get }
+    
+    // Auto completed static prpoerties in extensions
+    static var fromFile: Bool { get }
+    static var isDateOptimized: Bool { get }
+    static var dateOptimizedPropertyName: String? { get }
+    static var isDocument: Bool { get }
+    
+    
+    
+    static var schema: String { get } // Need for Fluent Model
+    // Next properties are required fields for each entity type and no need to be described as entity properties objects
+    var id: UUID? { get set }
+    var deletedAt: Date? { get set }
+    var createdAt: Date? { get set }
+    var updatedAt: Date? { get set }
+    // End of requiered properties for model fields
+    
+
+    static func loadView(_ r: Request, _ v: [String], full f: Bool) async throws -> (any ViewEntityProtocol)?
+    /// Returns entity view by initializing view from request
+    static func pureView(_ r: Request) throws -> any ViewEntityProtocol
+    
+//    static func customOptions(request: Request) async throws -> [String:[Option]]?
+    
+    static func save(request: Request) async throws -> ResponseEncoded
+    static func get(request: Request) async throws -> GetResponseEncoded
+    static func delete(request: Request, id: UUID, force: Bool) async throws -> DeleteResponseEncoded
+    static func recalculate(request: Request) async throws -> (Encodable, (any ViewEntityProtocol)?)
+    
+    init()
     /// ID container to hold and pass entity ID. Optional for non yet existing entity
     var idContainer: IDContainer? { get }
     
@@ -41,6 +73,10 @@ public protocol EntityModelProtocol: EntityProtocol, Equatable, Content, FluentK
 }
 
 public extension EntityModelProtocol {
+    static var fromFile: Bool { false } // default for regular entity
+    static var isDateOptimized: Bool { false } // default for regular entity
+    static var dateOptimizedPropertyName: String? { nil } // default for regular entity
+    static var isDocument: Bool { false } // default for regular entity
     /// Initialize ID container with current enttiy id
     var idContainer: IDContainer? { IDContainer(id: self.id) }
     /// Default implementation of query builders that returns pure unmodified query
@@ -73,7 +109,7 @@ public extension EntityModelProtocol {
     }
     
     /// Default implementation of update query that throws error when try to call on non recalculatable entity
-    static func recalculate(request: Request) async throws -> (Encodable, ViewProtocol?) {
+    static func recalculate(request: Request) async throws -> (Encodable, (any ViewEntityProtocol)?) {
         throw Abort(.badRequest, reason: "Not recalculatable.")
     }
     
@@ -309,7 +345,7 @@ public extension EntityModelProtocol {
                 let codableEntity = try await request.requireCompanyDatabase().transaction { database -> EntityCodable in
                     return try await Self.createTransaction(createdEntity: entity, database: database, request: request)
                 }
-                let view: ViewProtocol = try request.isViewLoaded ? request.entityView : View<Self>(request: request)
+                let view: any ViewEntityProtocol = try request.isViewLoaded ? request.entityView : View<Self>(request: request)
                 return ResponseEncoded(view: view, entity: codableEntity)
             }
         }catch{
@@ -333,9 +369,7 @@ public extension EntityModelProtocol {
     }
     
     static func count(query: QueryBuilder<Self>) async throws -> Int { try await query.count() }
-}
 
-public extension EntityModelProtocol {
     /// Conforms to equatable by comparing entity id
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.id == rhs.id
@@ -349,7 +383,7 @@ public extension EntityModelProtocol {
         return view
     }
     
-    static func pureView(_ r: Request) throws -> ViewProtocol {
+    static func pureView(_ r: Request) throws -> any ViewEntityProtocol {
         try View<Self>(request: r)
     }
     
@@ -400,7 +434,7 @@ public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol {
 }
 
 public extension EntityModelProtocol where Self: LoadAllViewProtocol {
-    static func view(_ r: Request, _ v: [String] = []) async throws -> ViewProtocol? {
+    static func view(_ r: Request, _ v: [String] = []) async throws -> (any ViewEntityProtocol)? {
         var view = try await View<Self>.load(req: r, views: v, full: true)
         view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))
         return view
@@ -408,7 +442,7 @@ public extension EntityModelProtocol where Self: LoadAllViewProtocol {
 }
 
 public extension EntityModelProtocol where Self: DateOptimizedGetAllProtocol, Self: LoadAllViewProtocol {
-    static func view(_ r: Request, _ v: [String] = []) async throws -> ViewProtocol? {
+    static func view(_ r: Request, _ v: [String] = []) async throws -> (any ViewEntityProtocol)? {
         var view = try await View<Self>.load(req: r, views: v, full: true)
         view.rowsCount = try await Self.count(query: query(on: r.requireCompanyDatabase()))
         return view
