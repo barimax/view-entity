@@ -26,7 +26,7 @@ public extension EntityModelProtocol where Self == Self.DTO.M, Self: Recalculate
     }
 }
 public extension EntityModelProtocol where Self: RecalculateTriggersProtocol {
-//    static var recalculateTriggerFields: [String] { recalculateTriggerFields }
+    static var recalculateTriggerFields: [String] { recalculateTriggerFields }
 }
 
 /// If entity conforms to RecalculateProtocol but theres no DTO

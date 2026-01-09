@@ -22,6 +22,7 @@ public protocol EntityModelProtocol: EntityCodable, MenuProtocol, Equatable, Con
     static var isDateOptimized: Bool { get }
     static var dateOptimizedPropertyName: String? { get }
     static var isDocument: Bool { get }
+    static var recalculateTriggerFields: [String] { get }
     
     
     
@@ -73,6 +74,7 @@ public protocol EntityModelProtocol: EntityCodable, MenuProtocol, Equatable, Con
 }
 
 public extension EntityModelProtocol {
+    static var recalculateTriggerFields: [String] { [] } // default for regular entity
     static var fromFile: Bool { false } // default for regular entity
     static var isDateOptimized: Bool { false } // default for regular entity
     static var dateOptimizedPropertyName: String? { nil } // default for regular entity
