@@ -44,6 +44,8 @@ public extension ViewEntityProtocol {
     static func load(req: Request, views: [String] = [], full isFullLoad: Bool = false) async throws -> ViewProtocol {
         print("[JORO] loadedViewsRegisterNames: \(views)")
         var view = try View<T>(request: req, loadedViewsRegisterNames: views)
+        print("View generic T is", String(describing: T.self))
+        print("Triggers:", view.recalculateTriggerFields)
         print("[JORO] load View for \(view.registerName)")
         let customOptions = try await T.customOptions(request: req)
         let refOptionsData = try await view.fields.filter{ $0.ref != nil}.asyncMap { field -> (String, RefOptionField) in
