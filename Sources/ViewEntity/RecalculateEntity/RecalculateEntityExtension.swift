@@ -25,11 +25,13 @@ public extension EntityModelProtocol where Self == Self.DTO.M, Self: Recalculate
         return try DTO.fromModel(entity: newEntity)
     }
 }
+public extension EntityModelProtocol where Self: RecalculateTriggersProtocol {
+    static var recalculateTriggerFields: [String] { recalculateTriggerFields }
+}
 
 /// If entity conforms to RecalculateProtocol but theres no DTO
 /// Calls entity recalculate method without DTO ( dto: nil)
 public extension EntityModelProtocol where Self: RecalculateProtocol {
-    static var recalculateTriggerFields: [String] { recalculateTriggerFieldsList }
     static func recalculate(request: Request, view: ViewProtocol?, triggerFieldName: String?) async throws -> (Encodable, ViewProtocol?) {
         let recalculated = try await Self.recalculate(request: request, view: view, triggerFieldName: triggerFieldName, dto: nil)
         return recalculated as (Encodable, ViewProtocol?)

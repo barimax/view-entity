@@ -60,6 +60,6 @@ public extension ViewEntityProtocol {
     
 }
 
-public extension ViewEntityProtocol where T: RecalculateProtocol {
+public extension ViewEntityProtocol where T: RecalculateTriggersProtocol {
     var recalculateTriggerFields: [String] { T.recalculateTriggerFields }
 }
