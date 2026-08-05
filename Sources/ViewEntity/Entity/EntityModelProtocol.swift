@@ -44,7 +44,7 @@ public protocol EntityModelProtocol: EntityCodable, MenuProtocol, Equatable, Con
     static func save(request: Request) async throws -> ResponseEncoded
     static func get(request: Request) async throws -> GetResponseEncoded
     static func delete(request: Request, id: UUID, force: Bool) async throws -> DeleteResponseEncoded
-    static func recalculate(request: Request) async throws -> (Encodable, (any ViewEntityProtocol)?)
+    static func recalculate(request: Request) async throws -> (Encodable, [FieldProtocol]?, [String: RefOptionField]?)
     
     init()
     /// ID container to hold and pass entity ID. Optional for non yet existing entity
@@ -111,7 +111,7 @@ public extension EntityModelProtocol {
     }
     
     /// Default implementation of update query that throws error when try to call on non recalculatable entity
-    static func recalculate(request: Request) async throws -> (Encodable, (any ViewEntityProtocol)?) {
+    static func recalculate(request: Request) async throws -> (Encodable, [FieldProtocol]?, [String: RefOptionField]?) {
         throw Abort(.badRequest, reason: "Not recalculatable.")
     }
     

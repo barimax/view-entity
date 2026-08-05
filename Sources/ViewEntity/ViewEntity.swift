@@ -55,10 +55,10 @@ struct ViewEntityController: RouteCollection {
         return try await request.entityType.save(request: request)
     }
     
-    func recalculateEntity(request: Request) async throws -> DTOResponseEncoded {
+    func recalculateEntity(request: Request) async throws -> RecalculateResponseEncoded {
         try await request.loadAll()
-        let (entity, view) = try await request.entityType.recalculate(request: request)
-        return DTOResponseEncoded(view: view, entity: entity)
+        let (entity, fields, refOptions) = try await request.entityType.recalculate(request: request)
+        return .init(entity: entity, fields: fields, refOptions: refOptions)
     }
     
     func deleteEntity(request: Request) async throws -> DeleteResponseEncoded{

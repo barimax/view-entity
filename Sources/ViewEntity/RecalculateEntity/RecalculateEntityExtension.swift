@@ -17,7 +17,7 @@ public extension EntityModelProtocol where Self == Self.DTO.M, Self: Recalculate
     static func createTransaction(createdEntity: Self, database: Database, request: Request, view: inout (any ViewEntityProtocol)?) async throws -> EntityCodable {
         try await Self.create(newEntity: createdEntity, database: database, request: request)
         let dto = try DTO.fromModel(entity: createdEntity)
-        let (recalculated, _) = try await Self.recalculate(request: request, dto: dto)
+        let (recalculated, _, _) = try await Self.recalculate(request: request, dto: dto)
         return recalculated as EntityCodable
 
     }
@@ -26,10 +26,9 @@ public extension EntityModelProtocol where Self == Self.DTO.M, Self: Recalculate
         return try DTO.fromModel(entity: newEntity)
     }
     
-    static func recalculate(request: Request) async throws -> (any Encodable, (any ViewEntityProtocol)?) {
+    static func recalculate(request: Request) async throws -> (Encodable, [FieldProtocol]?, [String: RefOptionField]?) {
         let dto = try request.content.decode(DTO.self)
-        let (recalculatedDTO, view) = try await Self.recalculate(request: request, dto: dto)
-        return (recalculatedDTO, view)
+        return try await Self.recalculate(request: request, dto: dto)
     }
 }
 public extension EntityModelProtocol where Self: RecalculateTriggersProtocol {
@@ -39,8 +38,7 @@ public extension EntityModelProtocol where Self: RecalculateTriggersProtocol {
 /// If entity conforms to RecalculateProtocol but theres no DTO
 /// Calls entity recalculate method without DTO ( dto: nil)
 public extension EntityModelProtocol where Self: RecalculateProtocol {
-    static func recalculate(request: Request, view: (any ViewEntityProtocol)?, triggerFieldName: String?) async throws -> (Encodable, (any ViewEntityProtocol)?) {
-        let recalculated = try await Self.recalculate(request: request, dto: nil)
-        return recalculated as (Encodable, (any ViewEntityProtocol)?)
+    static func recalculate(request: Request, view: (any ViewEntityProtocol)?, triggerFieldName: String?) async throws -> (Encodable, [any FieldProtocol]?, [String: RefOptionField]?) {
+        return try await Self.recalculate(request: request, dto: nil)
     }
 }

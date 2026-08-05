@@ -77,7 +77,11 @@ public extension ViewEntityProtocol {
         try await T.decodeRequest(request: request)
     }
     
-    static func currentOptions(customOptions: [String : [SelectOption]]?,field: FieldProtocol, view: inout View<T>, database: Database) async throws -> [SelectOption] {
+    static func currentOptions(
+        customOptions: [String : [SelectOption]]?,
+        field: FieldProtocol,
+        view: inout View<T>, database: Database
+    ) async throws -> [SelectOption] {
         if let customOpts = customOptions {
             view.forceServerLoad = true
             if let unwrappedOptions = customOpts[field.name] {
