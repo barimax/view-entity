@@ -9,7 +9,7 @@ import Vapor
 import FluentKit
 
 public protocol RecalculateTriggersProtocol {
-    static var recalculateTriggerFields: [String] { get }
+    static var triggerFields: [String] { get }
 }
 
 public protocol RecalculateProtocol: RecalculateTriggersProtocol, DTOProtocol {

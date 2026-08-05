@@ -11,7 +11,7 @@ public protocol OptionableEnumProtocol: OptionableProtocol, CaseIterable {
     
     func getName() -> String?
     
-    static func prepareEnumMigration(database: Database) async throws -> DatabaseSchema.DataType
+    static func prepareEnumMigration(database: any Database) async throws -> DatabaseSchema.DataType
 }
 public extension OptionableEnumProtocol {
     static var isButton: Bool {
