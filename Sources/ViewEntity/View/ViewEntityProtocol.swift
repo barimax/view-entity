@@ -32,7 +32,7 @@ public protocol ViewEntityProtocol: SimpleViewEntityProtocol {
     func responseEncoder(from: [EntityCodable], lastLimit: Int) -> ResponseEncoded
     func responseEncoder(from: EntityCodable) -> ResponseEncoded
     static func load(req: Request, views: [String], full isFullLoad: Bool) async throws -> View<T>
-    static func currentOptions(customOptions: [String : [SelectOption]]?,field: FieldProtocol, view: inout View<T>, database: Database) async throws -> [SelectOption]
+
 }
 
 public extension ViewEntityProtocol {
@@ -77,20 +77,7 @@ public extension ViewEntityProtocol {
         try await T.decodeRequest(request: request)
     }
     
-    static func currentOptions(
-        customOptions: [String : [SelectOption]]?,
-        field: FieldProtocol,
-        view: inout View<T>, database: Database
-    ) async throws -> [SelectOption] {
-        if let customOpts = customOptions {
-            print("[JORO] Custom options for \(field.name): \(customOpts)")
-            view.forceServerLoad = true
-            if let unwrappedOptions = customOpts[field.name] {
-                return unwrappedOptions
-            }
-        }
-        return try await field.ref!.options(database: database)
-    }
+    
     
     func get(id: String?) async throws -> ResponseEncoded {
         guard let uuidString = id,

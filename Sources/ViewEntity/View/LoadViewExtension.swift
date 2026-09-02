@@ -18,17 +18,12 @@ public extension ViewEntityProtocol {
     }
     
     static func getRefView(view: inout View<T>, request: Request, nestedRef: RefViewEntityProtocol.Type, isFullLoad: Bool) async throws -> RefViewProtocol {
-        let customOptions = try await nestedRef.customOptions(db: view.database)
+//        let customOptions = try await nestedRef.customOptions(db: view.database)
         var refViewRefOptions: [String: RefOptionField] = [:]
         var refViewRefViews: [String: RefViewProtocol] = [:]
         for field in nestedRef.fields {
             if let ref = field.ref {
-                let currentOptions = try await Self.currentOptions(
-                    customOptions: customOptions,
-                    field: field,
-                    view: &view,
-                    database: view.database
-                )
+                let currentOptions = try await field.ref!.options(database: view.database)
                 let refOptionView = try await Self.getRefOptionView(field: field, view: &view, isFullLoad: isFullLoad)
                 let refOption = RefOptionField(registerName: ref.registerName, options: currentOptions, isButton: ref.isButton, view: refOptionView)
                 refViewRefOptions[field.name] = refOption
@@ -47,14 +42,9 @@ public extension ViewEntityProtocol {
         print("View generic T is", String(describing: T.self))
         print("Triggers:", view.recalculateTriggerFields)
         print("[JORO] load View for \(view.registerName)")
-        let customOptions = try await T.customOptions(request: req)
+//        let customOptions = try await T.customOptions(request: req)
         let refOptionsData = try await view.fields.filter{ $0.ref != nil}.asyncMap { field -> (String, RefOptionField) in
-            let currentOptions = try await Self.currentOptions(
-                customOptions: customOptions,
-                field: field,
-                view: &view,
-                database: view.database
-            )
+            let currentOptions = try await field.ref!.options(database: view.database)
             let refOptionView = try await Self.getRefOptionView(field: field, view: &view, isFullLoad: isFullLoad)
             let refOption = RefOptionField(registerName: field.ref!.registerName, options: currentOptions, isButton: field.ref!.isButton, view: refOptionView)
             return (field.name, refOption)

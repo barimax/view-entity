@@ -13,7 +13,7 @@ public protocol RefViewEntityProtocol: Codable, Sendable {
     static var _schema: String? { get }
     static func refView(refOptions ro: [String:RefOptionField], refViews rw: [String: RefViewProtocol]) -> RefViewProtocol
     static func refView() -> RefViewProtocol
-    static func customOptions(db: Database) async throws -> [String:[SelectOption]]?
+//    static func customOptions(db: Database) async throws -> [String:[SelectOption]]?
     var id: UUID? { get set }
 }
 
