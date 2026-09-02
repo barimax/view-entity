@@ -83,6 +83,7 @@ public extension ViewEntityProtocol {
         view: inout View<T>, database: Database
     ) async throws -> [SelectOption] {
         if let customOpts = customOptions {
+            print("[JORO] Custom options for \(field.name): \(customOpts)")
             view.forceServerLoad = true
             if let unwrappedOptions = customOpts[field.name] {
                 return unwrappedOptions
