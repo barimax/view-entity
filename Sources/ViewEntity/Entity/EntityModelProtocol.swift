@@ -39,7 +39,7 @@ public protocol EntityModelProtocol: EntityCodable, MenuProtocol, Equatable, Con
     /// Returns entity view by initializing view from request
     static func pureView(_ r: Request) throws -> any ViewEntityProtocol
     
-//    static func customOptions(request: Request) async throws -> [String:[Option]]?
+    static func customOptions(request: Request) async throws -> [String: [SelectOption]]?
     
     static func save(request: Request) async throws -> ResponseEncoded
     static func get(request: Request) async throws -> GetResponseEncoded
