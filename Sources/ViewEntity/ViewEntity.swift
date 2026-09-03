@@ -21,7 +21,7 @@ struct ViewEntityController: RouteCollection {
         let entityGroup = routes.grouped("entity", ":registerName")
         entityGroup.get("view", use: getView)
         entityGroup.get("get", use: getEntity)
-//        entityGroup.get("get", ":id", use: getView)
+        entityGroup.get("get", ":id", use: getEntityByID)
         entityGroup.post("save", use: saveEntity)
         entityGroup.post("recalculate", use: recalculateEntity)
         entityGroup.delete(":id", use: deleteEntity)
@@ -48,6 +48,11 @@ struct ViewEntityController: RouteCollection {
     func getEntity(request: Request) async throws -> GetResponseEncoded {
         try request.loadEntityType()
         return try await request.entityType.get(request: request)
+    }
+    
+    func getEntityByID(request: Request) async throws -> GetEntityByIdResponseEncodable {
+        try request.loadEntityType()
+        return try await request.entityType.getById(request: request)
     }
     
     func saveEntity(request: Request) async throws -> ResponseEncoded{

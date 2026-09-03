@@ -33,6 +33,7 @@ public protocol EntityModelProtocol: EntityCodable, MenuProtocol, Equatable, Con
     var createdAt: Date? { get set }
     var updatedAt: Date? { get set }
     // End of requiered properties for model fields
+   
     
 
     static func loadView(_ r: Request, _ v: [String], full f: Bool) async throws -> (any ViewEntityProtocol)?
@@ -43,6 +44,7 @@ public protocol EntityModelProtocol: EntityCodable, MenuProtocol, Equatable, Con
     
     static func save(request: Request) async throws -> ResponseEncoded
     static func get(request: Request) async throws -> GetResponseEncoded
+    static func getById(request: Request) async throws -> GetEntityByIdResponseEncodable
     static func delete(request: Request, id: UUID, force: Bool) async throws -> DeleteResponseEncoded
     static func recalculate(request: Request) async throws -> (Encodable, [FieldProtocol]?, [String: RefOptionField]?)
     
@@ -369,7 +371,17 @@ public extension EntityModelProtocol {
         return DeleteResponseEncoded(backRefsOptions: backRefOptions)
         
     }
-    
+    static func getById(request: Request) async throws -> GetEntityByIdResponseEncodable {
+        guard let id = request.parameters.get("id"),
+              let uuid = UUID(uuidString: id),
+              let idValue = uuid as? IDValue else {
+            throw Abort(.badRequest, reason: "Missing entity ID.")
+        }
+        guard let entity = try await Self.find(idValue, on: try request.requireCompanyDatabase()) else {
+            throw Abort(.notFound)
+        }
+        return .init(entity: entity)
+    }
     static func count(query: QueryBuilder<Self>) async throws -> Int { try await query.count() }
 
     /// Conforms to equatable by comparing entity id

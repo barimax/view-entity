@@ -43,3 +43,24 @@ public struct GetResponseEncoded: AsyncResponseEncodable, Encodable {
         try container.encode(self.sortDirection, forKey: .sortDirection)
     }
 }
+
+public struct GetEntityByIdResponseEncodable: AsyncResponseEncodable, Encodable {
+    public func encodeResponse(for request: Request) async throws -> Response {
+        do {
+            let data = try await request.appConfiguration.encoder.encode(self)
+            return Response.init(status: .ok, headers: HTTPHeaders([("content-type","application/json")]), body: Response.Body.init(data: data))
+        }catch{
+            throw MyError.unconvirtible
+        }
+    }
+    let entity: any EntityCodable
+    
+    enum CodingKeys: String, CodingKey {
+        case entity
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(EncodableWrapper(entity), forKey: .entity)
+    }
+}
